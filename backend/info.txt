@@ -1,9 +1,0 @@
-Instalaciones de dependencias
-npm i express morgan mongoose cors bcrypt-nodejs jsonwebtoken dotenv
-
-Seguimiento
-1. Gestión de usuarios (back)
-    - Creación de usuarios true
-    - Encriptación password true
-    - Login true
-    - Autenticación con jwt false
