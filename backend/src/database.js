@@ -15,3 +15,13 @@ const connection = mongoose.connection;
 connection.once('open', () => {
     console.log('Database is connected');
 });
+
+/*
+db.users.insert({
+    firstName: "admin",
+    lastName: "admin",
+    "email": "admin@email.com",
+    "password": "admin",
+    "role": "admin"
+});
+*/
