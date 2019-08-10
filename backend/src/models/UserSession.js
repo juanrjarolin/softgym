@@ -1,10 +1,10 @@
 const {Schema, model} = require('mongoose');
 
 const UserSessionSchema = new Schema({
-    userId: {
-        type: Number,
-        default: -1
+    userToken:{
+        type: String
     },
+    
     timestamp: {
         type: Date,
         default: Date.now

@@ -14,7 +14,7 @@ app.use(bodyparser.json());
 app.use(cors());
 app.use(
     bodyparser.urlencoded({
-        extended: false
+        extended: true
     })
 );
 app.use(express.json());
@@ -22,8 +22,8 @@ app.use(morgan('dev'));
 
 process.env.SECRET_KEY = 'gympotencial';
 
-// routes
+// end points
 app.use('/api/account', require('./routes/users.routes'));
-app.use('/api/roles', require('./routes/roles.routes'));
+app.use('/api/rols', require('./routes/roles.routes'));
 
 module.exports = app;
