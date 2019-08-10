@@ -25,5 +25,5 @@ process.env.SECRET_KEY = 'gympotencial';
 // routes
 app.use('/api/account', require('./routes/users.routes'));
 app.use('/api/roles', require('./routes/roles.routes'));
-
+app.use('/api/products', require('./routes/products.routes'));
 module.exports = app;
