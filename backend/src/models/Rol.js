@@ -6,7 +6,7 @@ const RolSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        enum: ['administrador', 'vendedor', 'cliente'],
+        enum: ['administrador', 'cliente', 'vendedor'],
         validate: [
             validate({
                 validator: 'isLength',
@@ -21,7 +21,6 @@ const RolSchema = new Schema({
             })
         ]
     }
-    
 });
 
 module.exports = model('Rol', RolSchema);

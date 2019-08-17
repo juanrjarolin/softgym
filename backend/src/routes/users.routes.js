@@ -2,7 +2,7 @@
 const { Router } = require('express');
 const router = Router();
 
-const {getUsers, createUser, getUser, deleteUser, updateUser, login, verificarUsuario, updatePassword} = require('../controllers/users.controller');
+const {getUsers, createUser, getUser, deleteUser, updateUser, login, verificarUsuario, updatePassword } = require('../controllers/users.controller');
 
 //rest api account users and security
 router.get('/', verificarUsuario, getUsers);

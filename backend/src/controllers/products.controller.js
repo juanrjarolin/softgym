@@ -1,12 +1,9 @@
 const productController = {};
 
 const ProductModel = require('../models/Product');
-//const {Schema, model} = require('mongoose');
-
-//const pr
 
 productController.createProduct = async (req, res) =>{
-    const {name,price,cost,stockMinimo} = req.body; //
+    const {name, price, cost, minimumStock} = req.body;
 
     if(!name){
         return res.json({
@@ -18,52 +15,49 @@ productController.createProduct = async (req, res) =>{
     if(!price){
         return res.json({
             success: false,
-            messagge:'El precio debe ser ingresado'
+            message:'El precio debe ser ingresado'
         });
     }
     if(!cost){
         return res.json({
             success: false,
-            messagge: 'El costo debe ser ingresado'
+            message: 'El costo debe ser ingresado'
         });
     }
-    if(!stockMinimo){
+    if(!minimumStock){
         return res.json({
-            success :false,
-            messagge: 'El stock minimo debe ser ingresado'
+            success: false,
+            message: 'El stock minimo debe ser ingresado'
         });
     }
      
-    //const product = await ProductModel.findById;//ver 
     const newProduct = new ProductModel({
         name,
         price,
         cost,
-        stockMinimo
+        minimumStock
     });
 
     await newProduct.save((err,product) => {
         if (product){
             res.json({
                 success: true,
-                messagge: 'Yes'
+                message: 'Se ha insertado el producto correctamente'
             })
         }else{
             res.json({
                 success: false,
-                messagge: 'Vaya!'
+                message: 'Vaya!'
             })
         }
     });
 };
 
 productController.deleteProduct = async (req, res) =>{
-    const productDel =  await ProductModel.findByIdAndDelete(req.params.id);
-    //await ProductModel.findByIdAndDelete(req.params.id);
-    return res.json({
+    await ProductModel.findByIdAndDelete(req.params.id);
+    res.json({
         success: true,
-        messagge: 'Producto eliminado exitosamente',
-        data: productDel.name
+        message: 'Producto eliminado exitosamente'
     });
 };
 
@@ -75,6 +69,14 @@ productController.getProduct = async (req, res) =>{
 productController.getProducts = async(req,res) =>{
     const products = await ProductModel.find();
     res.json(products);
+}
+
+productController.updateProduct = async(req, res) => {
+    await ProductModel.findByIdAndUpdate({_id: req.params.id}, req.body);
+    res.json({
+        success: true,
+        message: 'Producto actualizado'
+    });
 }
 
 module.exports = productController;

@@ -1,18 +1,24 @@
 const userController = {};
 
 //importaciones de módulos
+const util = require('util');
+const sleep = util.promisify(setTimeout);
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt-nodejs');
 const passGenerator = require('generate-password');
 const UserModel = require('../models/User');
 const UserSessionModel = require('../models/UserSession');
+const moment = require('moment');
+const momentTZ = require('moment-timezone');
+moment.locale('es');
+momentTZ.locale('es');
 
 //importando método de controlador para el envio de email
 const { sendEmail } = require('./email.controller');
 
 //definiendo los métodos para el rest api account users
 //login
-userController.login = async (req, res) => {
+userController.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     //verifica los atributos
@@ -51,10 +57,11 @@ userController.login = async (req, res) => {
 
                         //se guarda la sesion
                         const userSession = new UserSessionModel({
-                            userToken: token
+                            userToken: token,
+                            dateSession: moment().format('LLL')
                         });
-                        userSession.save()
                         
+                        userSession.save();
                         //se envía el token
                         res.send(token);
                     }else{
@@ -269,6 +276,52 @@ userController.updatePassword = async (req, res) => {
             });
         });
     });
+}
+
+//método para controlar las peticiones hechas por el usuario
+userController.afterActions = async (req, res, next) => {
+
+    try {
+        var recurso = '';
+        const token = req.headers['authorization'];
+        const session = await UserSessionModel.findOne({userToken:token});
+        
+        //consulta sobre el recurso solicitado
+        if(req.baseUrl === '/api/account'){
+            recurso = 'usuarios';
+        }else if(req.baseUrl === '/api/products'){
+            recurso = 'productos';
+        }else if(req.baseUrl === '/api/rols'){
+            recurso = 'roles';
+        }
+
+        //consulta sobre el método utilizado
+        if(req.method === 'GET'){
+            if(!req.params.id){
+                session.actions.push(`Consulta de ${recurso}`);
+                session.dateActions = new moment();
+            }else{
+                session.actions.push(`Consulta para actualización de ${recurso}`);
+                session.dateActions = new moment();
+            }
+        }else if(req.method === 'POST'){
+            session.actions.push(`Creación de ${recurso}`);
+            session.dateActions = new moment();
+        }else if(req.method === 'PUT'){
+            session.actions.push(`Actualización de ${recurso}`);
+            session.dateActions = new moment();
+        }else if(req.method === 'DELETE'){
+            session.actions.push(`Eliminación de ${recurso}`);
+            session.dateActions = new moment();
+        }
+
+        let conjunto = [...new Set(session.actions)];
+        session.actions = conjunto;
+        await session.save();
+        next(); 
+    } catch (error) {
+        console.log(error);
+    }
 }
 
 module.exports = userController;
