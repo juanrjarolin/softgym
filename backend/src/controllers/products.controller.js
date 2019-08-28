@@ -2,29 +2,29 @@ const productController = {};
 
 const ProductModel = require('../models/Product');
 
-productController.createProduct = async (req, res) =>{
-    const {name, price, cost, minimumStock} = req.body;
+productController.createProduct = async (req, res) => {
+    const {nombre, precio, costo, stockMinimo} = req.body;
 
-    if(!name){
+    if(!nombre){
         return res.json({
             success: false,
             message: 'El nombre no puede estar vacío'
         });
     }
     
-    if(!price){
+    if(!precio){
         return res.json({
             success: false,
             message:'El precio debe ser ingresado'
         });
     }
-    if(!cost){
+    if(!costo){
         return res.json({
             success: false,
             message: 'El costo debe ser ingresado'
         });
     }
-    if(!minimumStock){
+    if(!stockMinimo){
         return res.json({
             success: false,
             message: 'El stock minimo debe ser ingresado'
@@ -32,10 +32,10 @@ productController.createProduct = async (req, res) =>{
     }
      
     const newProduct = new ProductModel({
-        name,
-        price,
-        cost,
-        minimumStock
+        nombre,
+        precio,
+        costo,
+        stockMinimo
     });
 
     await newProduct.save((err,product) => {
@@ -47,13 +47,13 @@ productController.createProduct = async (req, res) =>{
         }else{
             res.json({
                 success: false,
-                message: 'Vaya!'
+                message: 'Ha ocurrido un error'
             })
         }
     });
 };
 
-productController.deleteProduct = async (req, res) =>{
+productController.deleteProduct = async (req, res) => {
     await ProductModel.findByIdAndDelete(req.params.id);
     res.json({
         success: true,
@@ -61,12 +61,12 @@ productController.deleteProduct = async (req, res) =>{
     });
 };
 
-productController.getProduct = async (req, res) =>{
+productController.getProduct = async (req, res) => {
     const product = await ProductModel.findById(req.params.id);
     res.json(product);
 };
 
-productController.getProducts = async(req,res) =>{
+productController.getProducts = async(req,res) => {
     const products = await ProductModel.find();
     res.json(products);
 }

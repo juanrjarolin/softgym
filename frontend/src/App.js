@@ -15,7 +15,10 @@ import Signup from './components/auth/SignUp';
 import Landing from './components/layouts/Landing';
 import Rol from './components/auth/Rol';
 import ActionUsers from './components/auth/ActionUsers';
-import Product from './components/Product/Product'
+import Product from './components/productos/Product'
+import Proveedor from './components/proveedores/Proveedor'
+import Equipos from './components/equipos/Equipo'
+import Mantenimiento from './components/mantenimiento/Mantenimiento'
 
 export default class App extends Component {
 
@@ -32,6 +35,9 @@ export default class App extends Component {
             <Route exact path="/rols" component={Rol} />
             <Route exact path="/action-users" component={ActionUsers} />
             <Route exact path="/products" component={Product} />
+            <Route exact path="/proveedores" component={Proveedor} />
+            <Route exact path="/equipos" component={Equipos} />
+            <Route exact path="/mantenimiento" component={Mantenimiento} />
           </Switch>
         </div>
       </Router>

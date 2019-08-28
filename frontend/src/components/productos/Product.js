@@ -2,8 +2,6 @@ import React, { Component } from 'react'
 import M from 'materialize-css/dist/js/materialize.min.js'
 import axios from 'axios'
 import { NotificationContainer, NotificationManager } from 'react-notifications'
-import jwt_decode from 'jwt-decode'
-import Security from '../security/Security'
 
 export default class Product extends Component {
     constructor() {

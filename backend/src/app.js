@@ -23,9 +23,13 @@ app.use(morgan('dev'));
 process.env.SECRET_KEY = 'gympotencial';
 
 // end points
-app.use('/api/account', require('./routes/users.routes'));
-app.use('/api/products', require('./routes/products.routes'));
-app.use('/api/rols', require('./routes/roles.routes'));
-app.use('/api/sessions', require('./routes/sessions.routes'));
+app.use('/api/account', require('./routes/users.routes')); //usuarios
+app.use('/api/products', require('./routes/products.routes')); //productos
+app.use('/api/rols', require('./routes/roles.routes')); //roles de usuario
+app.use('/api/sessions', require('./routes/sessions.routes')); //sesiones de usuario
+app.use('/api/ventas', require('./routes/ventas.routes')); //ventas
+app.use('/api/proveedores', require('./routes/proveedores.routes')); //proveedores
+app.use('/api/equipos', require('./routes/equipos.routes')); //Equipos del gimnasio
+app.use('/api/mantenimiento', require('./routes/mantenimientos.routes')); //mantenimiento de equipos
 
 module.exports = app;

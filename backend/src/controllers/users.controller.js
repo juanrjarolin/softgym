@@ -67,7 +67,7 @@ userController.login = async (req, res, next) => {
                     }else{
                         return res.json({
                             success: false,
-                            message: 'Contraseña incorrecta'
+                            message: 'Credenciales incorrectas'
                         });
                     }
                 }else{
@@ -81,7 +81,7 @@ userController.login = async (req, res, next) => {
                     }else{
                         return res.json({
                             success: false,
-                            message: 'Contraseña incorrecta'
+                            message: 'Credenciales incorrectas'
                         });
                     }
                 }

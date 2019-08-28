@@ -3,8 +3,8 @@ import M from 'materialize-css/dist/js/materialize.min.js'
 import { NavLink, withRouter } from 'react-router-dom'
 
 class Admin extends Component {
-    
-    componentDidMount(){
+
+    componentDidMount() {
         let elems = document.querySelectorAll('.dropdown-trigger')
         M.Dropdown.init(elems)
     }
@@ -22,12 +22,6 @@ class Admin extends Component {
                     <NavLink to="/">Inicio</NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to="#">Proveedores</NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink to="#">Clientes</NavLink>
-                </li>
-                <li className="nav-item">
                     <NavLink to="#">Caja</NavLink>
                 </li>
                 <li className="nav-item">
@@ -38,6 +32,22 @@ class Admin extends Component {
                 </li>
                 <li className="nav-item">
                     <NavLink to="/products">Productos</NavLink>
+                </li>
+                <li className="nav-item">
+                    <NavLink exact className="dropdown-trigger" data-target="equipo_id" to="#">Equipos<i className="material-icons right">arrow_drop_down</i>
+                    </NavLink>
+                    <ul id="equipo_id" className="dropdown-content">
+                        <li><NavLink to="/equipos">Máquinas</NavLink></li>
+                        <li><NavLink to="/mantenimiento">Mantenimiento</NavLink></li>
+                    </ul>
+                </li>
+                <li className="nav-item">
+                    <NavLink exact className="dropdown-trigger" data-target="persona_id" to="#">Personas<i className="material-icons right">arrow_drop_down</i>
+                    </NavLink>
+                    <ul id="persona_id" className="dropdown-content">
+                        <li><NavLink to="/clientes">Clientes</NavLink></li>
+                        <li><NavLink to="/proveedores">Proveedores</NavLink></li>
+                    </ul>
                 </li>
                 <li className="nav-item">
                     <NavLink exact className="dropdown-trigger" data-target="user_id" to="#">Usuarios<i className="material-icons right">arrow_drop_down</i>

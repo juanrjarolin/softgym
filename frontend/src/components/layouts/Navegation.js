@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Link, withRouter, NavLink } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 import Admin from './Admin'
+import Cliente from './Cliente'
 
 class Navbar extends Component {
 
@@ -31,6 +32,9 @@ class Navbar extends Component {
             switch (decode.role) {
                 case "administrador":
                     navUser = <Admin />
+                    break;
+                case "cliente":
+                    navUser = <Cliente />
                     break;
                 default:
                     navUser = navLogin
