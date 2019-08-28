@@ -22,8 +22,11 @@ app.use(morgan('dev'));
 
 process.env.SECRET_KEY = 'gympotencial';
 
-// routes
+// end points
 app.use('/api/account', require('./routes/users.routes'));
-app.use('/api/roles', require('./routes/roles.routes'));
+app.use('/api/products', require('./routes/products.routes'));
+app.use('/api/rols', require('./routes/roles.routes'));
+app.use('/api/sessions', require('./routes/sessions.routes'));
+app.use('/api/clases', require('./routes/class.routes'));
 
 module.exports = app;

@@ -1,7 +1,10 @@
+//IMPORTANDO EL ESQUEMA Y MODELO DE MONGOOSE
 const {Schema, model} = require('mongoose');
-const bcrypt = require('bcrypt-nodejs');
-const validate = require('mongoose-validator');
+const bcrypt = require('bcrypt-nodejs'); // MÉTODO PARA ENCRIPTACIÓN
+const validate = require('mongoose-validator'); //MÉTODO PARA VALIDACIONES
+const autopopulate = require('mongoose-autopopulate'); //MÉTODO DE AUTOPOBLACIÓN
 
+//CREANDO EL ESQUEMA USERS
 const UserSchema = new Schema({
     firstName: {
         type: String,
@@ -21,6 +24,7 @@ const UserSchema = new Schema({
             })
         ]
     },
+
     lastName: {
         type: String,
         required: true,
@@ -39,20 +43,13 @@ const UserSchema = new Schema({
             })
         ]
     },
-    userName: {
+
+    email: {
         type: String,
         required: true,
-        trim: true,
-        unique: true,
-        validate: [
-            validate({
-                validator: 'isLength',
-                arguments: [5, 15],
-                message: 'Se requiere entre {ARGS[0]} y {ARGS[1]} caracteres',
-                httpStatus: 400
-            })
-        ]
+        unique: true
     },
+
     password: {
         type: String,
         required: true,
@@ -65,14 +62,28 @@ const UserSchema = new Schema({
             })
         ]
     },
+
     isDelete: {
+        type: Boolean,
+        default: false
+    },
+
+    role: {
+        type: Schema.Types.ObjectId,
+        required: true,
+        ref: 'Rol',
+        autopopulate: {select: 'name'}
+    },
+
+    isPassChanged:{
         type: Boolean,
         default: false
     }
 }, {
-    timestamps: true
+    timestamps: false,
 });
-
+UserSchema.plugin(autopopulate);
+/*
 UserSchema.pre('save', function(next){
     const usuario = this;
     if(!usuario.isModified('password')){
@@ -92,8 +103,11 @@ UserSchema.pre('save', function(next){
     });
 });
 
+*/
+
 UserSchema.methods.compararPassword = function(password){
     return bcrypt.compareSync(password, this.password);
 }
 
+//EXPORTANDO EL MODELO USER UTILIZANDO EL ESQUEMA CREADO PARA EL USER
 module.exports = model('User', UserSchema);

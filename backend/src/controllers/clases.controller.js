@@ -56,8 +56,16 @@ classController.deleteClass = async (req, res) =>{
 };
 
 classController.getClass = async (req, res) =>{
-    const clase = await ClassModel.findById(req.params.id);
-    res.json(clase);
+    try {
+        const clase = await ClassModel.findById(req.params.id);
+        res.json(clase);
+    } catch (error) {
+        res.json({
+            success: false,
+            message: 'No se encontró la clase'
+        });
+    }
+    
 };
 
 classController.getClases = async(req,res) =>{
