@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import 'react-notifications/lib/notifications.css'
-import 'materialize-css/dist/css/materialize.min.css'
-import 'materialize-css/dist/js/materialize.min.js'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'react-notifications/lib/notifications.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'animate.css'
-
 
 import './App.css';
 
@@ -15,8 +14,19 @@ import Signup from './components/auth/SignUp';
 import Landing from './components/layouts/Landing';
 import Rol from './components/auth/Rol';
 import ActionUsers from './components/auth/ActionUsers';
+<<<<<<< HEAD
 import Product from './components/Product/Product'
 import Clientes from './components/cliente/Cliente'
+=======
+import Product from './components/productos/Product'
+import Proveedor from './components/proveedores/Proveedor'
+import Equipos from './components/equipos/Equipo'
+import Mantenimiento from './components/mantenimiento/Mantenimiento'
+import Clases from './components/clases/Clases'
+import Reservas from './components/reservas/Reserva'
+import Sucursales from './components/sucursales/Sucursal'
+import VentaProducto from './components/ventas/Product'
+>>>>>>> b0f2ff919dc24324b8df6406e50ad81f619608e1
 
 export default class App extends Component {
 
@@ -26,14 +36,24 @@ export default class App extends Component {
         <div className="App">
           <Navbar/>
           <Switch>
-            <Route exact path="/signin" component={Signin} />
             <Route exact path="/" component={Landing} />
+            <Route exact path="/signin" component={Signin} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/rols" component={Rol} />
             <Route exact path="/action-users" component={ActionUsers} />
             <Route exact path="/products" component={Product} />
+<<<<<<< HEAD
             <Route exact path="/clientes" component={Clientes} />
+=======
+            <Route exact path="/proveedores" component={Proveedor} />
+            <Route exact path="/equipos" component={Equipos} />
+            <Route exact path="/mantenimiento" component={Mantenimiento} />
+            <Route exact path="/clases" component={Clases} />
+            <Route exact path="/reservas" component={Reservas} />
+            <Route exact path="/sucursales" component={Sucursales} />
+            <Route exact path="/venta-producto" component={VentaProducto} />
+>>>>>>> b0f2ff919dc24324b8df6406e50ad81f619608e1
           </Switch>
         </div>
       </Router>

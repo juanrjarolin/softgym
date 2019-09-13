@@ -6,18 +6,11 @@ body, #root{
     background-repeat: no-repeat;
 }
 
-.select-dropdown{
+.card {
+    background-color: rgba(0, 0, 0, .6);
     color: white;
 }
 
-ul.dropdown-content.select-dropdown li span {
-    color: #000;
-}
-
-.card {
-    background-color: rgba(0, 0, 0, .6);
-}
-
-.input-field {
-    height: 50px;
+.form-control {
+    border-radius: 2px;
 }

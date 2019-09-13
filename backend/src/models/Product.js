@@ -1,19 +1,19 @@
 const {Schema, model} = require('mongoose');
 
-const ProductModel = new Schema({
-    name: {
+const ProductSchema = new Schema({
+    nombre: {
         type: String,
         required: true,    
         unique: true,
         uppercase: true
     },
 
-    price: {
+    precio: {
         type: Number,
         required: true
     },
 
-    cost: {
+    costo: {
         type: Number,
         required: true  
     },
@@ -22,15 +22,17 @@ const ProductModel = new Schema({
         type: Number
     },
 
-    minimumStock: {
+    stockMinimo: {
         type: Number,
         required:true
     },
     
-    lastPurchase:{
+    ultimaCompra:{
         type: Date
     }
    
+}, {
+    timestamps: false
 });
 
-module.exports = model('Product',ProductModel);
+module.exports = model('Product',ProductSchema);

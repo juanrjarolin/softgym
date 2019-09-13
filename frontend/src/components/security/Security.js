@@ -1,34 +1,55 @@
 import React, { Component } from 'react'
-import M from "materialize-css"
-import { Link } from 'react-router-dom'
-import "materialize-css/dist/css/materialize.min.css"
+import Modal from 'react-modal';
+import { withRouter } from 'react-router-dom'
 
-export default class Security extends Component {
-    componentDidMount() {
-        M.Modal.init(this.Modal)
-        let instance = M.Modal.getInstance(this.Modal)
-        instance.open()
+const customStyles = {
+    content: {
+        top: '50%',
+        left: '50%',
+        right: 'auto',
+        bottom: 'auto',
+        marginRight: '-50%',
+        transform: 'translate(-50%, -50%)'
     }
+};
+
+Modal.setAppElement('#root')
+
+class Security extends Component {
+    constructor() {
+        super()
+        this.state = {
+            modalIsOpen: false
+        }
+        this.closeModal = this.closeModal.bind(this);
+    }
+
+    componentDidMount(){
+        this.setState({ modalIsOpen: true });
+    }
+
+    closeModal() {
+        this.setState({ modalIsOpen: false });
+        this.props.history.push(`/`)
+    }
+
     render() {
         return (
-            <>
-                <div className="section container">
-                    <div className="row">
-                        <div className="col s4"></div>
-                        <div className="col s4">
-                            <div ref={Modal => { this.Modal = Modal; }} id="modal1" className="modal">
-                                <div className="modal-content">
-                                    <h4>Contenido no disponible</h4>
-                                    <p>Por favor, inicia sesión</p>
-                                </div>
-                                <div className="modal-footer">
-                                    <Link to="/" className="modal-close waves-effect waves-green btn-flat">Salir</Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </>
+            <div>
+                <Modal
+                    isOpen={this.state.modalIsOpen}
+                    onRequestClose={this.closeModal}
+                    style={customStyles}
+                    contentLabel="Example Modal"
+                >
+
+                    <h2 ref={subtitle => this.subtitle = subtitle}>Acceso denegado</h2>
+                    <p>Es posible que deba iniciar sesión o tener los permisos suficientes.</p>
+                    <button className="btn btn-primary" onClick={this.closeModal}>Cerrar</button>
+                </Modal>
+            </div>
         )
     }
 }
+
+export default withRouter(Security)

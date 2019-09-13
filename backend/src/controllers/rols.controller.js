@@ -49,19 +49,45 @@ rolController.createRol = async (req, res) => {
 }
 
 rolController.updateRol = async(req, res) => {
-    await RolModel.findOneAndUpdate({ _id: req.params.id }, req.body);
-    res.json({
-        success: true,
-        message: "Rol actualizado"
-    }); 
+    try {
+        const {name} = req.body;
+        const rol = await RolModel.findById(req.params.id);
+        rol.name = name;
+        const newRol = await rol.save();
+        console.log(newRol);
+        res.json({
+            success: true,
+            message: "Rol actualizado"
+        }); 
+    } catch (error) {
+        res.json({
+            success: false,
+            message: 'Rol no disponible'
+        });
+    }
 }
 
 rolController.deleteRol = async(req, res) => {
-    await RolModel.findByIdAndDelete(req.params.id);
-    res.json({
-        success: true,
-        message: "Rol eliminado"
-    });
+    try {
+        const rol = await RolModel.findById(req.params.id)
+        if(rol.name === "administrador"){
+            res.json({
+                success: false,
+                message: 'No se puede eliminar el rol de administrador'
+            });
+        }else{
+            await RolModel.findByIdAndDelete(req.params.id);
+            res.json({
+                success: true,
+                message: "Rol eliminado"
+            });
+        }
+    } catch (error) {
+        res.json({
+            success: false,
+            message: "Ocurrió un error"
+        });
+    }
 }
 
 module.exports = rolController;
