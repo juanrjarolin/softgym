@@ -133,51 +133,53 @@ export default class Cliente extends Component {
                                     <span className="card-title white-text">Registro de Clientes</span>
                                     <form onSubmit={this.handleSubmit} id="form">
                                         <div className="row">
-                                            <div className="input-field col s12">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="tipoPersona">Tipo Persona</label>
 
-                                                <input type="text" minLength="2" maxLength="15" id="tipoPersona" onChange={this.handleChange} name="tipoPersona" className="validate white-text" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.tipoPersona} />
+                                                <input type="text" minLength="2" maxLength="15" id="tipoPersona" onChange={this.handleChange} name="tipoPersona" className="form-control-sm" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.tipoPersona} />
 
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                                                
                                             </div>
-                                            <div className="input-field col s12">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="name">Nombre</label>
 
-                                                <input type="text" id="name" onChange={this.handleChange} name="name" className="validate white-text" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.name} />
+                                                <input type="text" id="name" onChange={this.handleChange} name="name" className="form-control-sm" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.name} />
 
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                                                
                                             </div>
-                                            <div className="input-field col s12">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="cedula">Cedula</label>
 
-                                                <input type="text" id="cedula" onChange={this.handleChange} name="cedula" className="validate white-text"  title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.cedula} />
+                                                <input type="text" id="cedula" onChange={this.handleChange} name="cedula" className="form-control-sm"  title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.cedula} />
 
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                                               
                                             </div>
-                                            <div className="input-field col s12">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="direccion">Direccion</label>
 
                                                 <input type="text" id="direccion" onChange={this.handleChange} name="direccion" className="validate white-text" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.direccion} />
 
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                                               
                                             </div>
-                                            <div className="input-field col s12">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="telefono">Telefono</label>
 
-                                                <input type="text" id="telefono" onChange={this.handleChange} name="telefono" className="validate white-text"  title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.telefono} />
+                                                <input type="text" id="telefono" onChange={this.handleChange} name="telefono" className="form-control-sm"  title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.telefono} />
 
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                                               
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn waves-effect waves-light btn-small center-align" name="action">Guardar</button>
+                                        <div className="form-group col-sm-10">
+                                            <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar</button>              
+                                        </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
                         <div className="col s8">
                             <div className="card">
-                                <div className="card-content">
-                                    <span className="card-title white-text">Clientes</span>
+                                <div className="card-body">
+                                    <span className="card-title">Clientes</span>
                                     <table className="highlight">
                                         <thead>
                                             <tr className="white-text">
@@ -199,10 +201,10 @@ export default class Cliente extends Component {
                                                             <td>{cliente.direccion}</td>
                                                             <td>{cliente.telefono}</td>
                                                             <td>
-                                                                <button className="btn waves-effect waves-light btn-small">
+                                                                <button className="btn btn-primary btn-sm">
                                                                     <i className="material-icons" onClick={() => this.editCliente(cliente._id)}>edit</i>
                                                                 </button>
-                                                                <button className="btn waves-effect waves-light btn-small" style={{ margin: '4px' }}>
+                                                                <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
                                                                     <i className="material-icons" onClick={() => this.deleteCliente(cliente._id)}>delete</i>
                                                                 </button>
                                                             </td>
