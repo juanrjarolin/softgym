@@ -22,6 +22,7 @@ import Clases from './components/clases/Clases'
 import Reservas from './components/reservas/Reserva'
 import Sucursales from './components/sucursales/Sucursal'
 import VentaProducto from './components/ventas/Product'
+import Recuperacion from './components/auth/Recuperacion'
 
 export default class App extends Component {
 
@@ -34,6 +35,7 @@ export default class App extends Component {
             <Route exact path="/" component={Landing} />
             <Route exact path="/signin" component={Signin} />
             <Route exact path="/signup" component={Signup} />
+            <Route exact path="/recuperacion-password" component={Recuperacion} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/rols" component={Rol} />
             <Route exact path="/action-users" component={ActionUsers} />

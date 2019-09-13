@@ -235,6 +235,10 @@ userController.createUser = async (req, res) => {
     }
 }
 
+userController.recuperacionPassword = async(req, res) => {
+    
+}
+
 //método para mostrar un usuario
 userController.getUser = async (req, res) => {
     const user = await UserModel.findById(req.params.id);

@@ -43,7 +43,7 @@ export default ({handleSubmit}) => {
                         <button type="submit" className="btn btn-primary btn-sm" name="action">Ingresar</button>
                     </div>
                     <div className="form-group col-sm-12">
-                        <p className="card-text">¿Olvidó su contraseña? <Link to="#">Recuperar</Link></p>
+                        <p className="card-text">¿Olvidó su contraseña? <Link to="/recuperacion-password">Recuperar</Link></p>
                     </div>
                 </div>
             </form>
