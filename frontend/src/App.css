@@ -1,0 +1,23 @@
+body, #root{
+    background: #fafafa;
+    height: 100%;
+    background-image: url("./components/layouts/fondo-gym.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.select-dropdown{
+    color: white;
+}
+
+ul.dropdown-content.select-dropdown li span {
+    color: #000;
+}
+
+.card {
+    background-color: rgba(0, 0, 0, .6);
+}
+
+.input-field {
+    height: 50px;
+}

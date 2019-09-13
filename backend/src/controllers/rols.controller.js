@@ -35,7 +35,7 @@ rolController.createRol = async (req, res) => {
             if(err){
                 return res.json({
                     success: false,
-                    message: 'Error. Los nombres requeridos para los roles son -administrador- o -usuario-'
+                    message: 'Error. Los nombres requeridos para los roles son: administrador, vendedor o cliente.'
                 });
             }else{
                 return res.json({

@@ -73,5 +73,13 @@ clienteController.updateCliente = async(req,res) =>{
   });
 }
 
-
+clienteController.deleteCliente = async(req,res) =>{
+    await ClienteModel.findByIdAndDelete({
+        _id: req.params.id},
+         req.body);
+    res.json({
+        success: true,
+        message: 'Cliente eliminado'
+    }); 
+}
 module.exports = clienteController;

@@ -7,24 +7,29 @@ const ProductModel = new Schema({
         unique: true,
         uppercase: true
     },
+
     price: {
         type: Number,
-        required: true // seria el not null
+        required: true
     },
+
     cost: {
         type: Number,
         required: true  
     },
+
     stockActual: {
         type: Number
     },
-    stockMinimo: {
+
+    minimumStock: {
         type: Number,
         required:true
     },
-    ultimaCompra:{
-        type:Date
-    } 
+    
+    lastPurchase:{
+        type: Date
+    }
    
 });
 
