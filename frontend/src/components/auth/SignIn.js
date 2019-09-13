@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import axios from 'axios';
-import M from 'materialize-css/dist/js/materialize.min.js'
 import { NotificationContainer, NotificationManager } from 'react-notifications'
 import ChangePassword from './ChangePassword'
 import Login from './Login'
@@ -53,7 +52,7 @@ export default class Signin extends Component {
                     }
                 })
         }else{
-            M.toast({html: 'Las contraseñas no coinciden', classes: 'rounded'})
+            NotificationManager.error('Las contraseñas no coinciden', 'Error')
         }
     }
 
@@ -80,13 +79,12 @@ export default class Signin extends Component {
                     } else {
                         localStorage.setItem('usertoken', res.data)
                         this.props.history.push(`/`)
-                        M.toast({ html: 'Sesión iniciada', outDuration: 500 })
                         return res.data
                     }
                 }
             })
             .catch(err => {
-                NotificationManager.error('Ha ocurrido un error', 'Error')
+                NotificationManager.error('Ha ocurrido un error al conectar con el servidor', 'Error')
             })
     }
 
@@ -94,10 +92,10 @@ export default class Signin extends Component {
         const {showChangePassword, showLogin} = this.state
 
         return (
-            <div className="section container animated bounceInDown">
+            <div className="container p-5 animated bounceInDown">
                 <div className="row">
-                    <div className="col s4"></div>
-                    <div className="card col s4" style={style}>
+                    <div className="col-sm-4"></div>
+                    <div className="card col-sm-4" style={style}>
                         {showLogin && <Login handleSubmit={this.handleLogin}/>}
                         {showChangePassword && <ChangePassword handleSubmit={this.handleChangePassword} />}
                     </div>

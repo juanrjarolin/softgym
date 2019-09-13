@@ -19,33 +19,31 @@ export default ({handleSubmit}) => {
     }
 
     return (
-        <div className="card-content">
-            <span className="card-title white-text">Inicio de sesión</span>
+        <div className="card-body">
+            <h5 className="card-title">Inicio de sesión</h5>
             <form onSubmit={(e) => handleSubmit(e, args)} id="form">
                 <div className="row">
-                    <div className="input-field col s12" style={{ height: '50px' }}>
+                    <div className="form-group col-sm-11">
                         <label htmlFor="email">Email</label>
-                        <input type="email" id="email" onChange={handleChange} name="email" className="validate white-text" required autoComplete="off" />
+                        <input type="email" id="email" onChange={handleChange} name="email" className="form-control form-control-sm validate" required autoComplete="off" placeholder="Ingrese su correo electrónico"/>
                     </div>
-                    <div className="input-field col s12" style={{ height: '50px' }}>
+                    <div className="form-group col-sm-11">
                         <label htmlFor="password">Contraseña</label>
-                        <input type="password" id="password" onChange={handleChange} name="password" className="validate white-text" required autoComplete="off" />
+                        <input type="password" id="password" onChange={handleChange} name="password" className="form-control form-control-sm validate" required autoComplete="off" placeholder="Ingrese su contraseña"/>
                     </div>
-                    <div className="input-field col s12">
+                    <div className="form-check col-sm-11">
                         <p>
                             <label>
-                                <input type="checkbox" onClick={showPassword} />
-                                <span>Mostrar contraseña</span>
+                                <input type="checkbox" onClick={showPassword}/>
+                                <span className="px-2">Mostrar contraseña</span>
                             </label>
                         </p>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="col s12">
-                        <button type="submit" className="btn waves-effect waves-light btn-small center-align" name="action">Ingresar</button>
+                    <div className="form-group col-sm-11">
+                        <button type="submit" className="btn btn-primary btn-sm" name="action">Ingresar</button>
                     </div>
-                    <div className="col s12">
-                        <Link to="#" style={{ margin: '4px' }}>¿Olvidó su contraseña?</Link>
+                    <div className="form-group col-sm-12">
+                        <p className="card-text">¿Olvidó su contraseña? <Link to="#">Recuperar</Link></p>
                     </div>
                 </div>
             </form>

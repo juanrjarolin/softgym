@@ -8,7 +8,7 @@ const VentaSchema = new Schema({
     },
 
     fecha: {
-        type: Date,
+        type: String,
         required: true
     },
 
@@ -18,15 +18,18 @@ const VentaSchema = new Schema({
     },
 
     cliente: {
+        type: String
+        /*
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'Cliente',
-        autopopulate: true
+        autopopulate: true*/
     },
 
     plazo: {
         type: Number,
-        required: true
+        required: true,
+        default: 2
     },
 
     tipo_venta: {

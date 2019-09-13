@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import M from 'materialize-css/dist/js/materialize.min.js'
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications'
 import jwt_decode from 'jwt-decode'
@@ -32,15 +31,10 @@ export default class Signup extends Component {
             if (decode.role === 'administrador') {
                 //estable un headers por defecto con el token obtenido
                 axios.defaults.headers.common['Authorization'] = token
-                
+
                 //se actualizan las listas del state
                 this.fetchRols()
                 this.fetchUsers()
-
-                //se renderiza
-                this.setState({
-                    isLoading: true
-                })
             } else {
                 this.setState({
                     isLoading: false
@@ -122,7 +116,6 @@ export default class Signup extends Component {
             _id: res.data._id,
             editing: true
         })
-        M.updateTextFields();
     }
 
     async deleteUser(id) {
@@ -189,39 +182,37 @@ export default class Signup extends Component {
     render() {
         const { isLoading } = this.state
         if (isLoading) {
-            var elems = document.querySelectorAll('select')
-            M.FormSelect.init(elems)
             return (
-                <div className="section container animated zoomIn">
+                <div className="container py-5 animated zoomIn">
                     <div className="row">
-                        <div className="col s4">
+                        <div className="col-sm-4">
                             <div className="card">
-                                <div className="card-content">
-                                    <span className="card-title white-text">Registro de usuario</span>
+                                <div className="card-body">
+                                    <h5 className="card-title">Registro de usuario</h5>
                                     <form onSubmit={this.handleSubmit} id="form">
                                         <div className="row">
-                                            <div className="input-field col s6">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="firstName">Nombre</label>
 
-                                                <input type="text" minLength="3" maxLength="15" id="firstName" onChange={this.handleChange} name="firstName" className="validate white-text" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.firstName} />
+                                                <input type="text" minLength="3" maxLength="15" id="firstName" onChange={this.handleChange} name="firstName" className="form-control form-control-sm" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 y máx: 15" autoComplete="off" value={this.state.firstName} placeholder="Ingrese el nombre del usuario"/>
 
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
                                             </div>
 
-                                            <div className="input-field col s6">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="lastName">Apellido</label>
-                                                <input type="text" minLength="3" maxLength="15" id="lastName" onChange={this.handleChange} name="lastName" className="validate white-text" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 máx: 15" autoComplete="off" value={this.state.lastName} />
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+
+                                                <input type="text" minLength="3" maxLength="15" id="lastName" onChange={this.handleChange} name="lastName" className="form-control form-control-sm" required pattern="[A-Za-z]+" title="Se requiere caracteres alfabéticos min: 3 máx: 15" autoComplete="off" value={this.state.lastName} placeholder="Ingrese el apellido del usuario"/>
+
                                             </div>
 
-                                            <div className="input-field col s12">
+                                            <div className="form-group col-sm-10">
                                                 <label htmlFor="email">Correo electrónico</label>
-                                                <input type="email" id="email" onChange={this.handleChange} name="email" className="validate white-text" required title="Se puede ingresar caracteres alfabéticos o alfanuméricos min:5 y máx:15" autoComplete="off" value={this.state.email} />
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                                                <input type="email" id="email" onChange={this.handleChange} name="email" className="form-control form-control-sm" required title="Se puede ingresar caracteres alfabéticos o alfanuméricos min:5 y máx:15" autoComplete="off" value={this.state.email} placeholder="Ingrese el email del usuario"/>
                                             </div>
 
-                                            <div className="input-field col s12">
-                                                <select className="white-text" name="role" onChange={this.handleChange} >
+                                            <div className="form-group col-sm-6">
+                                                <label htmlFor="rol">Rol del usuario</label>
+                                                <select className="form-control form-control-sm" name="role" id="rol" onChange={this.handleChange} >
                                                     <option defaultValue>Seleccione un rol</option>
                                                     {
                                                         this.state.rols.map(rol => {
@@ -231,42 +222,42 @@ export default class Signup extends Component {
                                                         })
                                                     }
                                                 </select>
-                                                <label>Elija un rol para el usuario</label>
+                                            </div>
+                                            <div className="form-group col-sm-11">
+                                                <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar</button>
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn waves-effect waves-light btn-small center-align" name="action">Guardar<i className="small material-icons right">save</i>
-                                        </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div className="col s8">
+                        <div className="col-sm-8">
                             <div className="card">
-                                <div className="card-content">
-                                    <span className="card-title white-text">Dashboard</span>
-                                    <table className="highlight">
+                                <div className="card-header">Listado de usuarios</div>
+                                <div className="card-body">
+                                    <table className="table table-hover table-dark">
                                         <thead>
-                                            <tr className="white-text">
-                                                <th>Nombre</th>
-                                                <th>Apellido</th>
-                                                <th>Correo</th>
-                                                <th>Rol</th>
+                                            <tr className="px-2">
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Apellido</th>
+                                                <th scope="col">Correo</th>
+                                                <th scope="col">Rol</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
                                                 this.state.users.map(user => {
                                                     return (
-                                                        <tr key={user._id} className="white-text">
+                                                        <tr key={user._id}>
                                                             <td>{user.firstName}</td>
                                                             <td>{user.lastName}</td>
                                                             <td>{user.email}</td>
                                                             <td>{user.role.name}</td>
                                                             <td>
-                                                                <button className="btn waves-effect waves-light btn-small">
+                                                                <button className="btn btn-primary btn-sm">
                                                                     <i className="material-icons" onClick={() => this.editUser(user._id)}>edit</i>
                                                                 </button>
-                                                                <button className="btn waves-effect waves-light btn-small" style={{ margin: '4px' }}>
+                                                                <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
                                                                     <i className="material-icons" onClick={() => this.deleteUser(user._id)}>delete</i>
                                                                 </button>
                                                             </td>

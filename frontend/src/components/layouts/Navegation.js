@@ -3,6 +3,7 @@ import { Link, withRouter, NavLink } from 'react-router-dom'
 import jwt_decode from 'jwt-decode'
 import Admin from './Admin'
 import Cliente from './Cliente'
+import Vendedor from './Vendedor'
 
 class Navbar extends Component {
 
@@ -18,9 +19,9 @@ class Navbar extends Component {
     render() {
         let navUser
         const navLogin = (
-            <ul className="right hide-on-med-and-down">
+            <ul className="navbar-nav">
                 <li className="nav-item">
-                    <NavLink to="/signin">Iniciar sesión</NavLink>
+                    <NavLink className="nav-link" to="/signin">Iniciar sesión</NavLink>
                 </li>
             </ul>
         )
@@ -36,6 +37,9 @@ class Navbar extends Component {
                 case "cliente":
                     navUser = <Cliente />
                     break;
+                case "vendedor":
+                    navUser = <Vendedor />
+                    break;
                 default:
                     navUser = navLogin
                     break;
@@ -45,10 +49,10 @@ class Navbar extends Component {
         }
 
         return (
-            <div className="navbar-fixed">
-                <nav className="grey darken-4">
-                    <div className="nav-wrapper container">
-                        <Link className="brand-logo" to="/">SoftGym</Link>
+            <div>
+                <nav className="navbar navbar-expand-lg navbar-dark" style={{backgroundColor: '#000f29'}}>
+                    <div className="container">
+                        <Link className="navbar-brand" to="/">SoftGym</Link>
                         {navUser}
                     </div>
                 </nav>

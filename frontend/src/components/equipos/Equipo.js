@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
-import M from 'materialize-css/dist/js/materialize.min.js'
 import { NotificationContainer, NotificationManager } from 'react-notifications'
+import jwt_decode from 'jwt-decode'
+import Security from '../security/Security'
 
 export default class Equipo extends Component {
     constructor() {
@@ -19,7 +20,27 @@ export default class Equipo extends Component {
     }
 
     componentDidMount() {
-        this.fetchEquipos()
+        var token = localStorage.getItem('usertoken')
+        if (token) {
+            //decodifica el token
+            const decode = jwt_decode(token)
+            if (decode.role === 'administrador' || decode.role === "vendedor") {
+                //estable un headers por defecto con el token obtenido
+                axios.defaults.headers.common['Authorization'] = token
+
+                //se actualizan las listas del state
+                this.fetchEquipos()
+
+            } else {
+                this.setState({
+                    isLoading: false
+                })
+            }
+        } else {
+            this.setState({
+                isLoading: false
+            })
+        }
     }
 
     async fetchEquipos() {
@@ -66,13 +87,13 @@ export default class Equipo extends Component {
                     })
                     this.fetchEquipos()
                     document.getElementById('form').reset()
-                    M.updateTextFields()
                 }
             } else {
                 const result = await axios.post('http://localhost:4000/api/equipos', equipo)
                 if (result.data.success === false) {
                     NotificationManager.error(result.data.message, 'Registro')
                 } else {
+                    NotificationManager.success(result.data.message, 'Registro')
                     this.setState({
                         nombre: '',
                         cod_equipo: '',
@@ -81,8 +102,6 @@ export default class Equipo extends Component {
                     })
                     this.fetchEquipos()
                     document.getElementById('form').reset()
-                    M.updateTextFields()
-                    NotificationManager.success(result.data.message, 'Registro')
                 }
             }
         } catch (error) {
@@ -102,7 +121,6 @@ export default class Equipo extends Component {
                 _id: equipo.data._id,
                 editing: true
             })
-            M.updateTextFields()
         } catch (error) {
             NotificationManager.error('Ha ocurrido un error', 'Registro')
         }
@@ -121,88 +139,97 @@ export default class Equipo extends Component {
     }
 
     render() {
-        return (
-            <div className="section container">
-                <div className="row">
-                    <div className="col s4">
-                        <div className="card">
-                            <div className="card-content">
-                                <span className="card-title white-text">Registro de equipos</span>
-                                <form onSubmit={this.handleSubmit} id="form">
-                                    <div className="row">
-                                        <div className="input-field col s12">
-                                            <label htmlFor="nombre">Nombre</label>
-                                            <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="nombre" id="nombre" className="validate white-text" required pattern="[A-Za-z]+" title="Ingrese nombre del equipo" autoComplete="off" value={this.state.nombre} />
-
-                                            <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+        const {isLoading} = this.state
+        if(isLoading){
+            return (
+                <div className="container py-5">
+                    <div className="row">
+                        <div className="col-sm-4">
+                            <div className="card">
+                                <div className="card-body">
+                                    <h5 className="card-title">Registro de máquinas</h5>
+                                    <form onSubmit={this.handleSubmit} id="form">
+                                        <div className="row">
+                                            <div className="form-group col-sm-10">
+                                                <label htmlFor="nombre">Nombre</label>
+    
+                                                <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="nombre" id="nombre" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese nombre del equipo" autoComplete="off" value={this.state.nombre} placeholder="Ingrese el nombre de la máquina" />
+    
+                                            </div>
+                                            <div className="form-group col-sm-10">
+                                                <label htmlFor="cod_equipo">Código del equipo</label>
+    
+                                                <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="cod_equipo" id="cod_equipo" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese el codigo del equipo" autoComplete="off" value={this.state.cod_equipo} placeholder="Ingrese el código de la máquina" />
+    
+                                            </div>
+                                            <div className="form-group col-sm-10">
+                                                <label htmlFor="costo">Costo</label>
+    
+                                                <input type="number" onChange={this.handleChange} name="costo" id="costo" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese costo del equipo" autoComplete="off" value={this.state.costo} placeholder="Ingrese el costo de la máquina" />
+    
+                                            </div>
+                                            <div className="form-group col-sm-10">
+                                                <label htmlFor="descripcion">Descripción</label>
+                                                <textarea className="form-control form-control-sm" name="descripcion" id="descripcion" onChange={this.handleChange} value={this.state.descripcion} placeholder="Agregue una descripción de la máquina"></textarea>
+    
+                                            </div>
+                                            <div className="form-group col-sm-12">
+                                                <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar
+                                                </button>
+                                            </div>
                                         </div>
-                                        <div className="input-field col s12">
-                                            <label htmlFor="cod_equipo">Código del equipo</label>
-                                            <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="cod_equipo" id="cod_equipo" className="validate white-text" required pattern="[A-Za-z]+" title="Ingrese el codigo del equipo" autoComplete="off" value={this.state.cod_equipo} />
-
-                                            <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
-                                        </div>
-                                        <div className="input-field col s12">
-                                            <label htmlFor="costo">Costo</label>
-                                            <input type="number" onChange={this.handleChange} name="costo" id="costo" className="validate white-text" required pattern="[A-Za-z]+" title="Ingrese costo del equipo" autoComplete="off" value={this.state.costo} />
-
-                                            <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
-                                        </div>
-                                        <div className="input-field col s12">
-                                            <label htmlFor="descripcion">Descripción</label>
-                                            <textarea className="validate materialize-textarea" required name="descripcion" id="descripcion" onChange={this.handleChange} value={this.state.descripcion} ></textarea>
-
-                                            <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
-                                        </div>
-                                    </div>
-                                    <button type="submit" className="btn waves-effect waves-light btn-small center-align" name="action">Guardar
-                                    </button>
-                                </form>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-sm-8">
+                            <div className="card">
+                                <div className="card-header">Listado de Máquinas</div>
+                                <div className="card-body">
+                                    <table className="table table-hover table-dark">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Nombre</th>
+                                                <th scope="col">Código</th>
+                                                <th scope="col">Costo(Gs.)</th>
+                                                <th scope="col">Descripción</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                this.state.equipos.map(equipo => {
+                                                    return (
+                                                        <tr key={equipo._id}>
+                                                            <td>{equipo.nombre}</td>
+                                                            <td>{equipo.cod_equipo}</td>
+                                                            <td>{equipo.costo}</td>
+                                                            <td>{equipo.descripcion}</td>
+                                                            <td>
+                                                                <button className="btn btn-primary btn-sm">
+                                                                    <i className="material-icons" onClick={() => this.editEquipo(equipo._id)}>edit</i>
+                                                                </button>
+                                                                <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
+                                                                    <i className="material-icons" onClick={() => this.deleteEquipo(equipo._id)}>delete</i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    )
+                                                })
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div className="col s8">
-                        <div className="card">
-                            <div className="card-content">
-                                <span className="card-title white-text">Equipos</span>
-                                <table>
-                                    <thead>
-                                        <tr className="white-text">
-                                            <th>Nombre</th>
-                                            <th>Código</th>
-                                            <th>Costo(Gs.)</th>
-                                            <th>Descripción</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {
-                                            this.state.equipos.map(equipo => {
-                                                return (
-                                                    <tr key={equipo._id} className="white-text">
-                                                        <td>{equipo.nombre}</td>
-                                                        <td>{equipo.cod_equipo}</td>
-                                                        <td>{equipo.costo}</td>
-                                                        <td>{equipo.descripcion}</td>
-                                                        <td>
-                                                            <button className="btn waves-effect waves-light btn-small">
-                                                                <i className="material-icons" onClick={() => this.editEquipo(equipo._id)}>edit</i>
-                                                            </button>
-                                                            <button className="btn waves-effect waves-light btn-small" style={{ margin: '4px' }}>
-                                                                <i className="material-icons" onClick={() => this.deleteEquipo(equipo._id)}>delete</i>
-                                                            </button>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                        }
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
+                    <NotificationContainer />
                 </div>
-                <NotificationContainer />
-            </div>
-        )
+            )
+        }else{
+            return (
+                <Security />
+            )
+        }
+        
     }
 }

@@ -11,18 +11,16 @@ class Cliente extends Component {
 
     render() {
         return (
-             <ul className="right hide-on-med-and-down" >
-                <li className="active">
-                    <NavLink to="/">Inicio</NavLink>
+            <ul className="navbar-nav" >
+                <li className="nav-item active">
+                    <NavLink className="nav-link" to="/">Inicio</NavLink>
                 </li>
                 <li className="nav-item">
-                    <NavLink to="/clases">Clases</NavLink>
+                    <NavLink className="nav-link" to="/reservas">Reservas</NavLink>
                 </li>
+             
                 <li className="nav-item">
-                    <NavLink to="/reservas">Reservas</NavLink>
-                </li>
-                <li className="nav-item">
-                    <NavLink to="#" onClick={this.handleLogout}>Salir</NavLink>
+                    <NavLink className="nav-link" to="#" onClick={this.handleLogout}>Salir</NavLink>
                 </li>
             </ul>
         )

@@ -1,7 +1,4 @@
 const {Schema, model} = require('mongoose');
-const mongoose = require('mongoose');
-require('mongoose-moment')(mongoose);
-
 const UserSessionSchema = new Schema({
     userToken:{
         type: String
@@ -13,7 +10,7 @@ const UserSessionSchema = new Schema({
 
     actions: [String],
 
-    dateActions: 'Moment',
+    dateActions: String,
 
     isDelete: {
         type: Boolean,

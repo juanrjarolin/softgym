@@ -9,8 +9,9 @@ router.get('/', verificarUsuario, getUsers);
 router.get('/:id', verificarUsuario, getUser);
 router.post('/signup', verificarUsuario, createUser);
 router.post('/signin', login);
-router.delete('/:id', verificarUsuario, deleteUser);
-router.put('/:id', verificarUsuario, updateUser);
+router.delete('/:id', deleteUser);
+router.put('/:id', updateUser);
 router.put('/changepassword/:id', updatePassword);
-//router.get('/verify?token=', verificarUsuario);
+router.get('/profile', verificarUsuario);
+
 module.exports = router;

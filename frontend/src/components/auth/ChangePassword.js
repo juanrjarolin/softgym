@@ -21,32 +21,28 @@ export default ({handleSubmit}) => {
     }
 
     return (
-        <div className="card-content animated bounceInDown">
-            <span className="card-title white-text">Cambio de Contraseña</span>
+        <div className="card-body animated bounceInDown">
+            <h5 className="card-title">Cambio de Contraseña</h5>
             <form onSubmit={(e) => handleSubmit(e, args)} id="form">
                 <div className="row">
-                    <div className="input-field col s12" style={{ height: '50px' }}>
+                    <div className="form-group col-sm-11">
                         <label htmlFor="password1">Nueva contraseña</label>
-                        <input type="password" id="password1" minLength="8" maxLength="15" onChange={handleChange} name="password1" className="validate white-text" required autoComplete="off" />
-                        <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                        <input type="password" id="password1" minLength="8" maxLength="15" onChange={handleChange} name="password1" className="form-control form-control-sm validate" required autoComplete="off" placeholder="Ingrese nueva contraseña"/>
                     </div>
-                    <div className="input-field col s12" style={{ height: '50px' }}>
+                    <div className="form-group col-sm-11">
                         <label htmlFor="password2">Confirmación de contraseña</label>
-                        <input type="password" id="password2" minLength="8" maxLength="15" onChange={handleChange} name="password2" className="validate white-text" required autoComplete="off" />
-                        <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                        <input type="password" id="password2" minLength="8" maxLength="15" onChange={handleChange} name="password2" className="form-control form-control-sm" required autoComplete="off" placeholder="Repita la contraseña"/>
                     </div>
-                    <div className="input-field col s12">
+                    <div className="form-check col-sm-11">
                         <p>
                             <label>
-                                <input type="checkbox" onClick={showPassword} />
-                                <span>Mostrar contraseña</span>
+                                <input type="checkbox" onClick={showPassword}/>
+                                <span className="px-2">Mostrar contraseña</span>
                             </label>
                         </p>
                     </div>
-                </div>
-                <div className="row">
-                    <div className="col s12">
-                        <button type="submit" className="btn waves-effect waves-light btn-small center-align" name="action">Guardar</button>
+                    <div className="form-group col-sm-11">
+                        <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar</button>
                     </div>
                 </div>
             </form>

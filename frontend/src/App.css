@@ -8,25 +8,9 @@ body, #root{
 
 .card {
     background-color: rgba(0, 0, 0, .6);
-}
-
-.input-field {
-    height: 50px;
-}
-
-.materialize-textarea {
     color: white;
 }
 
-select {
-    padding: 6px;
-    font-size: 15px;
-    color: white;
-    border: none;
-    outline: none;
-    border-radius: 0;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-color: rgba(0, 0, 0, .4);
+.form-control {
+    border-radius: 2px;
 }

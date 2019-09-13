@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import 'react-notifications/lib/notifications.css'
-import 'materialize-css/dist/css/materialize.min.css'
-import 'materialize-css/dist/js/materialize.min.js'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'react-notifications/lib/notifications.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'animate.css'
-
 
 import './App.css';
 
@@ -19,6 +18,10 @@ import Product from './components/productos/Product'
 import Proveedor from './components/proveedores/Proveedor'
 import Equipos from './components/equipos/Equipo'
 import Mantenimiento from './components/mantenimiento/Mantenimiento'
+import Clases from './components/clases/Clases'
+import Reservas from './components/reservas/Reserva'
+import Sucursales from './components/sucursales/Sucursal'
+import VentaProducto from './components/ventas/Product'
 
 export default class App extends Component {
 
@@ -28,8 +31,8 @@ export default class App extends Component {
         <div className="App">
           <Navbar/>
           <Switch>
-            <Route exact path="/signin" component={Signin} />
             <Route exact path="/" component={Landing} />
+            <Route exact path="/signin" component={Signin} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/rols" component={Rol} />
@@ -38,6 +41,10 @@ export default class App extends Component {
             <Route exact path="/proveedores" component={Proveedor} />
             <Route exact path="/equipos" component={Equipos} />
             <Route exact path="/mantenimiento" component={Mantenimiento} />
+            <Route exact path="/clases" component={Clases} />
+            <Route exact path="/reservas" component={Reservas} />
+            <Route exact path="/sucursales" component={Sucursales} />
+            <Route exact path="/venta-producto" component={VentaProducto} />
           </Switch>
         </div>
       </Router>

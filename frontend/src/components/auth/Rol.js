@@ -1,13 +1,8 @@
 import React, { Component } from 'react'
-import M from 'materialize-css'
 import axios from 'axios';
 import { NotificationContainer, NotificationManager } from 'react-notifications'
 import jwt_decode from 'jwt-decode'
 import Security from '../security/Security';
-
-var style = {
-    backgroundColor: 'rgba(0, 0, 0, .6)'
-}
 
 export default class Rol extends Component {
 
@@ -91,14 +86,12 @@ export default class Rol extends Component {
     }
 
     async editRol(id) {
-        document.getElementById('form').reset();
         const res = await axios.get('http://localhost:4000/api/rols/' + id)
         this.setState({
             name: res.data.name,
             _id: res.data._id,
             editing: true
         })
-        M.updateTextFields();
     }
 
     async deleteRol(id) {
@@ -107,6 +100,8 @@ export default class Rol extends Component {
                 if (res.data.success) {
                     this.fetchRols()
                     NotificationManager.success(res.data.message, 'Registro')
+                }else{
+                    NotificationManager.error(res.data.message, 'Registro')
                 }
             })
             .catch(err => {
@@ -120,36 +115,45 @@ export default class Rol extends Component {
             name: this.state.name
         }
 
-        if (this.state.editing) {
-            await axios.put('http://localhost:4000/api/rols/' + this.state._id, rol)
-            this.fetchRols();
-            this.setState({
-                name: '',
-                editing: false,
-                _id: ''
-            })
-            document.getElementById('form').reset();
-            M.updateTextFields();
-            NotificationManager.success('Actualización realizada con éxito', 'Registro')
-        } else {
-            await axios.post('http://localhost:4000/api/rols', rol)
-                .then(res => {
-                    if (res.data.success === false) {
-                        //Este mensaje se mostrará solo si se logra truncar la validacion del frontend
-                        //el backend tambien se encuentra validado
-                        NotificationManager.error(res.data.message, 'Registro')
-                    } else {
-                        this.setState({
-                            name: ''
-                        })
-                        this.fetchRols();
-                        document.getElementById('form').reset();
-                        NotificationManager.success('Registro realizado con éxito', 'Registro')
-                    }
-                })
-                .catch(err => {
-                    console.log(err)
-                })
+        try {
+            if (this.state.editing) {
+                await axios.put('http://localhost:4000/api/rols/' + this.state._id, rol)
+                    .then(res => {
+                        if(res.data.success === false){
+                            NotificationManager.error(res.data.message, 'Actualización')
+                        }else{
+                            this.fetchRols();
+                            this.setState({
+                                name: '',
+                                editing: false,
+                                _id: ''
+                            })
+                            document.getElementById('form').reset();
+                            NotificationManager.success(res.data.message, 'Actualización')
+                        }
+                    })
+            } else {
+                await axios.post('http://localhost:4000/api/rols', rol)
+                    .then(res => {
+                        if (res.data.success === false) {
+                            //Este mensaje se mostrará solo si se logra truncar la validacion del frontend
+                            //el backend tambien se encuentra validado
+                            NotificationManager.error(res.data.message, 'Registro')
+                        } else {
+                            this.setState({
+                                name: ''
+                            })
+                            this.fetchRols();
+                            document.getElementById('form').reset();
+                            NotificationManager.success('Registro realizado con éxito', 'Registro')
+                        }
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+            }
+        } catch (error) {
+            NotificationManager.error('Ha ocurrido un error', 'Error')
         }
     }
 
@@ -157,49 +161,48 @@ export default class Rol extends Component {
         const { isLoading } = this.state
         if (isLoading) {
             return (
-                <div className="section container">
+                <div className="container py-5">
                     <div className="row">
-                        <div className="col s4">
-                            <div className="card" style={style}>
-                                <div className="card-content">
-                                    <span className="card-title white-text">Registro de roles</span>
+                        <div className="col-sm-4">
+                            <div className="card">
+                                <div className="card-body">
+                                    <h5 className="card-title">Registro de roles</h5>
                                     <form onSubmit={this.handleSubmit} id="form">
                                         <div className="row">
-                                            <div className="input-field col s12" style={{ height: '50px' }}>
+                                            <div className="form-group col-sm-12">
                                                 <label htmlFor="name">Nombre del rol</label>
 
-                                                <input type="text" minLength="3" maxLength="15" id="name" onChange={this.handleChange} name="name" className="validate white-text" required pattern="[A-Za-z]+" title="Ingresar en minúsculas: administrador/usuario" autoComplete="off" value={this.state.name} />
-
-                                                <span className="helper-text" data-error="Incorrecto" data-success="Correcto"></span>
+                                                <input type="text" minLength="3" maxLength="15" id="name" onChange={this.handleChange} name="name" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingresar en minúsculas: administrador/vendedor/cliente" autoComplete="off" value={this.state.name} placeholder="Ingrese el nombre del rol"/>
+                                            </div>
+                                            <div className="form-group col-sm-12">
+                                                <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar</button>
                                             </div>
                                         </div>
-                                        <button type="submit" className="btn waves-effect waves-light btn-small center-align" name="action">Guardar<i className="small material-icons right">save</i>
-                                        </button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-                        <div className="col s8">
-                            <div className="card" style={style}>
-                                <div className="card-content">
-                                    <span className="card-title white-text">Dashboard</span>
-                                    <table className="highlight">
+                        <div className="col-sm-8">
+                            <div className="card">
+                                <div className="card-header">Listado de roles</div>
+                                <div className="card-body">
+                                    <table className="table table-sm table-hover table-dark">
                                         <thead>
-                                            <tr className="white-text">
-                                                <th>Nombre</th>
+                                            <tr>
+                                                <th scope="col">Nombre</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             {
                                                 this.state.rols.map(rol => {
                                                     return (
-                                                        <tr key={rol._id} className="white-text">
+                                                        <tr key={rol._id}>
                                                             <td>{rol.name}</td>
-                                                            <td>
-                                                                <button className="btn waves-effect waves-light btn-small">
+                                                            <td className="px-2">
+                                                                <button className="btn btn-primary btn-sm">
                                                                     <i className="material-icons" onClick={() => this.editRol(rol._id)}>edit</i>
                                                                 </button>
-                                                                <button className="btn waves-effect waves-light btn-small" style={{ margin: '4px' }}>
+                                                                <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
                                                                     <i className="material-icons" onClick={() => this.deleteRol(rol._id)}>delete</i>
                                                                 </button>
                                                             </td>
