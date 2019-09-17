@@ -6,7 +6,7 @@ const RolSchema = new Schema({
         type: String,
         required: true,
         unique: true,
-        enum: ['administrador', 'cliente', 'vendedor'],
+        uppercase: true,
         validate: [
             validate({
                 validator: 'isLength',

@@ -52,6 +52,7 @@ class Admin extends Component {
                     <div className="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <NavLink className="dropdown-item" to="/signup">Registro</NavLink>
                         <NavLink className="dropdown-item" to="/rols">Roles</NavLink>
+                        <NavLink className="dropdown-item" to="/permisos">Permisos</NavLink>
                     </div>
                 </li>
                 

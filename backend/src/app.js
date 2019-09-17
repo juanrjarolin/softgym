@@ -16,7 +16,7 @@ app.use(bodyparser.json());
 app.use(cors());
 app.use(
     bodyparser.urlencoded({
-        extended: false
+        extended: true
     })
 );
 app.use(express.json());
@@ -25,6 +25,7 @@ app.use(morgan('dev'));
 process.env.SECRET_KEY = 'gympotencial';
 
 // end points
+app.use('/api/cliente',require('./routes/clientes.routes'))
 app.use('/api/account', require('./routes/users.routes')); //usuarios
 app.use('/api/products', require('./routes/products.routes')); //productos
 app.use('/api/rols', require('./routes/roles.routes')); //roles de usuario
@@ -37,5 +38,6 @@ app.use('/api/mantenimiento', require('./routes/mantenimientos.routes')); //mant
 app.use('/api/clases', require('./routes/class.routes')); //clases
 app.use('/api/sucursales', require('./routes/sucursales.routes')); //sucursales
 app.use('/api/reservas', require('./routes/reservas.routes')); //reservas
+app.use('/api/permisos', require('./routes/permisos.routes')); //permisos
 
 module.exports = app;

@@ -7,10 +7,10 @@ const {getRols, getRol, createRol, updateRol, deleteRol} = require('../controlle
 const {verificarUsuario} = require('../controllers/users.controller');
 
 //api rest roles usuario
-router.get('/', verificarUsuario, getRols);
-router.get('/:id', verificarUsuario, getRol);
-router.post('/', verificarUsuario, createRol);
-router.put('/:id', verificarUsuario, updateRol);
-router.delete('/:id', verificarUsuario, deleteRol);
+router.get('/', getRols);
+router.get('/:id', getRol);
+router.post('/', createRol);
+router.put('/:id', updateRol);
+router.delete('/:id', deleteRol);
 
 module.exports = router;

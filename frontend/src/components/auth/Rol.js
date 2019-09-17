@@ -13,7 +13,11 @@ export default class Rol extends Component {
             rols: [],
             _id: '',
             editing: false,
-            isLoading: true
+            isLoading: false,
+            showRegistro: false,
+            showVisualizacion: false,
+            showEdit: false,
+            showDelete: false
         }
         this.handleChange = this.handleChange.bind(this)
         this.handleSubmit = this.handleSubmit.bind(this)
@@ -31,19 +35,33 @@ export default class Rol extends Component {
             if (token) {
                 //decodifica el token
                 const decode = jwt_decode(token)
-                if (decode.role === 'administrador') {
+                if (decode.permisos.crearRol) {
+                    this.setState({
+                        showRegistro: true,
+                        isLoading: true
+                    })
                     //estable un headers por defecto con el token obtenido
                     axios.defaults.headers.common['Authorization'] = token
                     //se actualizan la lista del state
-                    this.fetchRols()
-
-                    //se renderiza
+                }
+                if (decode.permisos.visualizarRol) {
                     this.setState({
+                        showVisualizacion: true,
                         isLoading: true
                     })
-                } else {
+                    this.fetchRols()
+                }
+                if (decode.permisos.editarRol) {
                     this.setState({
-                        isLoading: false
+                        showEdit: true,
+                        isLoading: true
+                    })
+                }
+
+                if (decode.permisos.eliminarRol) {
+                    this.setState({
+                        showDelete: true,
+                        isLoading: true
                     })
                 }
             } else {
@@ -100,7 +118,7 @@ export default class Rol extends Component {
                 if (res.data.success) {
                     this.fetchRols()
                     NotificationManager.success(res.data.message, 'Registro')
-                }else{
+                } else {
                     NotificationManager.error(res.data.message, 'Registro')
                 }
             })
@@ -119,9 +137,9 @@ export default class Rol extends Component {
             if (this.state.editing) {
                 await axios.put('http://localhost:4000/api/rols/' + this.state._id, rol)
                     .then(res => {
-                        if(res.data.success === false){
+                        if (res.data.success === false) {
                             NotificationManager.error(res.data.message, 'Actualización')
-                        }else{
+                        } else {
                             this.fetchRols();
                             this.setState({
                                 name: '',
@@ -158,63 +176,71 @@ export default class Rol extends Component {
     }
 
     render() {
-        const { isLoading } = this.state
+        const { isLoading, showRegistro, showDelete, showEdit, showVisualizacion } = this.state
+
+        const registro = (
+            <div className="col-sm-4">
+                <div className="card">
+                    <div className="card-body">
+                        <h5 className="card-title">Registro de roles</h5>
+                        <form onSubmit={this.handleSubmit} id="form">
+                            <div className="row">
+                                <div className="form-group col-sm-12">
+                                    <label htmlFor="name">Nombre del rol</label>
+
+                                    <input type="text" minLength="3" maxLength="15" id="name" onChange={this.handleChange} name="name" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingresar en minúsculas: administrador/vendedor/cliente" autoComplete="off" value={this.state.name} placeholder="Ingrese el nombre del rol" />
+                                </div>
+                                <div className="form-group col-sm-12">
+                                    <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        )
+
+        const visualizar = (
+            <div className="col-sm-8">
+                <div className="card">
+                    <div className="card-header">Listado de roles</div>
+                    <div className="card-body">
+                        <table className="table table-sm table-hover table-dark">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.state.rols.map(rol => {
+                                        return (
+                                            <tr key={rol._id}>
+                                                <td>{rol.name}</td>
+                                                <td className="px-2">
+                                                    {showEdit && <button className="btn btn-primary btn-sm">
+                                                        <i className="material-icons" onClick={() => this.editRol(rol._id)}>edit</i>
+                                                    </button>}
+                                                    {showDelete && <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
+                                                        <i className="material-icons" onClick={() => this.deleteRol(rol._id)}>delete</i>
+                                                    </button>}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        )
         if (isLoading) {
             return (
                 <div className="container py-5">
                     <div className="row">
-                        <div className="col-sm-4">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h5 className="card-title">Registro de roles</h5>
-                                    <form onSubmit={this.handleSubmit} id="form">
-                                        <div className="row">
-                                            <div className="form-group col-sm-12">
-                                                <label htmlFor="name">Nombre del rol</label>
-
-                                                <input type="text" minLength="3" maxLength="15" id="name" onChange={this.handleChange} name="name" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingresar en minúsculas: administrador/vendedor/cliente" autoComplete="off" value={this.state.name} placeholder="Ingrese el nombre del rol"/>
-                                            </div>
-                                            <div className="form-group col-sm-12">
-                                                <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-sm-8">
-                            <div className="card">
-                                <div className="card-header">Listado de roles</div>
-                                <div className="card-body">
-                                    <table className="table table-sm table-hover table-dark">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Nombre</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                this.state.rols.map(rol => {
-                                                    return (
-                                                        <tr key={rol._id}>
-                                                            <td>{rol.name}</td>
-                                                            <td className="px-2">
-                                                                <button className="btn btn-primary btn-sm">
-                                                                    <i className="material-icons" onClick={() => this.editRol(rol._id)}>edit</i>
-                                                                </button>
-                                                                <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
-                                                                    <i className="material-icons" onClick={() => this.deleteRol(rol._id)}>delete</i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                        {showRegistro && registro}
+                        {showVisualizacion && visualizar}
                     </div>
                     <NotificationContainer />
                 </div>

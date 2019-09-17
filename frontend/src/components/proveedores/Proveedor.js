@@ -18,7 +18,11 @@ export default class Proveedor extends Component {
             _id: '',
             proveedores: [],
             editing: false,
-            isLoading: true
+            isLoading: false,
+            showRegistro: false,
+            showEdit: false,
+            showVisualizacion: false,
+            showDelete: false
         }
     }
 
@@ -27,15 +31,33 @@ export default class Proveedor extends Component {
         if (token) {
             //decodifica el token
             const decode = jwt_decode(token)
-            if (decode.role === 'administrador') {
+            if (decode.permisos.crearProveedor) {
+                this.setState({
+                    showRegistro: true,
+                    isLoading: true
+                })
+
+            }
+            if (decode.permisos.visualizarProveedor) {
+                this.setState({
+                    showVisualizacion: true,
+                    isLoading: true
+                })
+                this.fetchProveedores()
                 //estable un headers por defecto con el token obtenido
                 axios.defaults.headers.common['Authorization'] = token
-
-                //se actualizan las listas del state
-                this.fetchProveedores()
-            } else {
+            }
+            if (decode.permisos.editarProveedor) {
                 this.setState({
-                    isLoading: false
+                    showEdit: true,
+                    isLoading: true
+                })
+            }
+
+            if (decode.permisos.eliminarProveedor) {
+                this.setState({
+                    showDelete: true,
+                    isLoading: true
                 })
             }
         } else {
@@ -145,7 +167,7 @@ export default class Proveedor extends Component {
         })
     }
 
-    async deleteProveedor(id){
+    async deleteProveedor(id) {
         await axios.delete('http://localhost:4000/api/proveedores/' + id)
             .then(res => {
                 if (res.data.success) {
@@ -159,107 +181,116 @@ export default class Proveedor extends Component {
     }
 
     render() {
-        const {isLoading} = this.state
-        if(isLoading){
-            return (
-                <div className="container py-5">
-                    <NotificationContainer />
-                    <div className="row">
-                        <div className="col-sm-4">
-                            <div className="card">
-                                <div className="card-body">
-                                    <h5 className="card-title">Registro de proveedores</h5>
-                                    <form onSubmit={this.handleSubmit} id="form">
-                                        <div className="row">
-                                            <div className="form-group col-sm-10">
-                                                <label htmlFor="nombre">Nombre</label>
-    
-                                                <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="nombre" id="nombre" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese nombre del proveedor" autoComplete="off" value={this.state.nombre} placeholder="Ingrese el nombre del proveedor"/>
-    
-                                            </div>
-                                            <div className="form-group col-sm-10">
-                                                <label htmlFor="apellido">Apellido</label>
-    
-                                                <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="apellido" id="apellido" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese apellido del proveedor" autoComplete="off" value={this.state.apellido} placeholder="Ingrese apellido del proveedor"/>
-    
-                                            </div>
-                                            <div className="form-group col-sm-10">
-                                                <label htmlFor="direccion">Dirección</label>
-    
-                                                <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="direccion" id="direccion" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese dirección del proveedor" autoComplete="off" value={this.state.direccion} placeholder="Ingrese dirección del proveedor"/>
-    
-                                            </div>
-                                            <div className="form-group col-sm-10">
-                                                <label htmlFor="cedula">Cédula</label>
-    
-                                                <input type="number" minLength="3" maxLength="15" onChange={this.handleChange} name="cedula" id="cedula" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese cedula del proveedor" autoComplete="off" value={this.state.cedula} placeholder="Ingrese cédula del proveedor"/>
-    
-                                            </div>
-                                            <div className="form-group col-sm-10">
-                                                <label htmlFor="telefono">Teléfono</label>
-                                                <input type="number" minLength="3" maxLength="15" onChange={this.handleChange} name="telefono" id="telefono" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese telefono del proveedor" autoComplete="off" value={this.state.telefono} placeholder="Ingrese teléfono del proveedor"/>
-    
-                                            </div>
-                                            <div className="form-group col-sm-10">
-                                                <label htmlFor="correo">Correo</label>
-    
-                                                <input type="email" onChange={this.handleChange} name="correo" id="correo" className="form-control form-control-sm validate" required title="Ingrese correo del proveedor" autoComplete="off" value={this.state.correo} placeholder="Ingrese email del proveedor"/>
-    
-                                            </div>
-                                            <div className="form-group col-sm-12">
-                                                <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar
+        const { isLoading, showDelete, showEdit, showRegistro, showVisualizacion } = this.state
+
+        const registro = (
+            <div className="col-sm-4">
+                <div className="card">
+                    <div className="card-body">
+                        <h5 className="card-title">Registro de proveedores</h5>
+                        <form onSubmit={this.handleSubmit} id="form">
+                            <div className="row">
+                                <div className="form-group col-sm-10">
+                                    <label htmlFor="nombre">Nombre</label>
+
+                                    <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="nombre" id="nombre" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese nombre del proveedor" autoComplete="off" value={this.state.nombre} placeholder="Ingrese el nombre del proveedor" />
+
+                                </div>
+                                <div className="form-group col-sm-10">
+                                    <label htmlFor="apellido">Apellido</label>
+
+                                    <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="apellido" id="apellido" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese apellido del proveedor" autoComplete="off" value={this.state.apellido} placeholder="Ingrese apellido del proveedor" />
+
+                                </div>
+                                <div className="form-group col-sm-10">
+                                    <label htmlFor="direccion">Dirección</label>
+
+                                    <input type="text" minLength="3" maxLength="15" onChange={this.handleChange} name="direccion" id="direccion" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese dirección del proveedor" autoComplete="off" value={this.state.direccion} placeholder="Ingrese dirección del proveedor" />
+
+                                </div>
+                                <div className="form-group col-sm-10">
+                                    <label htmlFor="cedula">Cédula</label>
+
+                                    <input type="number" minLength="3" maxLength="15" onChange={this.handleChange} name="cedula" id="cedula" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese cedula del proveedor" autoComplete="off" value={this.state.cedula} placeholder="Ingrese cédula del proveedor" />
+
+                                </div>
+                                <div className="form-group col-sm-10">
+                                    <label htmlFor="telefono">Teléfono</label>
+                                    <input type="number" minLength="3" maxLength="15" onChange={this.handleChange} name="telefono" id="telefono" className="form-control form-control-sm validate" required pattern="[A-Za-z]+" title="Ingrese telefono del proveedor" autoComplete="off" value={this.state.telefono} placeholder="Ingrese teléfono del proveedor" />
+
+                                </div>
+                                <div className="form-group col-sm-10">
+                                    <label htmlFor="correo">Correo</label>
+
+                                    <input type="email" onChange={this.handleChange} name="correo" id="correo" className="form-control form-control-sm validate" required title="Ingrese correo del proveedor" autoComplete="off" value={this.state.correo} placeholder="Ingrese email del proveedor" />
+
+                                </div>
+                                <div className="form-group col-sm-12">
+                                    <button type="submit" className="btn btn-primary btn-sm" name="action">Guardar
                                                 </button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-md-8">
-                            <div className="card">
-                                <div className="card-header">Listado de proveedores</div>
-                                <div className="card-body">
-                                    <table className="table table-hover table-dark">
-                                        <thead>
-                                            <tr>
-                                                <th scope="col">Nombre</th>
-                                                <th scope="col">Cédula</th>
-                                                <th scope="col">Dirección</th>
-                                                <th scope="col">Teléf.</th>
-                                                <th scope="col">Correo</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {
-                                                this.state.proveedores.map(proveedor => {
-                                                    return (
-                                                        <tr key={proveedor._id}>
-                                                            <td>{proveedor.nombre + " " + proveedor.apellido}</td>
-                                                            <td>{proveedor.cedula}</td>
-                                                            <td>{proveedor.direccion}</td>
-                                                            <td>{proveedor.telefono}</td>
-                                                            <td>{proveedor.correo}</td>
-                                                            <td>
-                                                                <button className="btn btn-primary btn-sm">
-                                                                    <i className="material-icons" onClick={() => this.editProveedor(proveedor._id)}>edit</i>
-                                                                </button>
-                                                                <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
-                                                                    <i className="material-icons" onClick={() => this.deleteProveedor(proveedor._id)}>delete</i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    )
-                                                })
-                                            }
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
+            </div>
+        )
+
+        const visualizar = (
+            <div className="col-md-8">
+                <div className="card">
+                    <div className="card-header">Listado de proveedores</div>
+                    <div className="card-body">
+                        <table className="table table-hover table-dark">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nombre</th>
+                                    <th scope="col">Cédula</th>
+                                    <th scope="col">Dirección</th>
+                                    <th scope="col">Teléf.</th>
+                                    <th scope="col">Correo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    this.state.proveedores.map(proveedor => {
+                                        return (
+                                            <tr key={proveedor._id}>
+                                                <td>{proveedor.nombre + " " + proveedor.apellido}</td>
+                                                <td>{proveedor.cedula}</td>
+                                                <td>{proveedor.direccion}</td>
+                                                <td>{proveedor.telefono}</td>
+                                                <td>{proveedor.correo}</td>
+                                                <td>
+                                                    {showEdit && <button className="btn btn-primary btn-sm">
+                                                        <i className="material-icons" onClick={() => this.editProveedor(proveedor._id)}>edit</i>
+                                                    </button>}
+                                                    {showDelete && <button className="btn btn-danger btn-sm" style={{ margin: '4px' }}>
+                                                        <i className="material-icons" onClick={() => this.deleteProveedor(proveedor._id)}>delete</i>
+                                                    </button>}
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        )
+
+        if (isLoading) {
+            return (
+                <div className="container py-5">
+                    <div className="row">
+                        {showRegistro && registro}
+                        {showVisualizacion && visualizar}
+                    </div>
+                    <NotificationContainer />
+                </div>
             )
-        }else{
+        } else {
             return (
                 <Security />
             )

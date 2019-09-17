@@ -23,12 +23,14 @@ export default class Recuperacion extends Component {
         }
 
         try {
-            const res = await axios.post('http://localhost:4000/api/account', email)
+            const res = await axios.post('http://localhost:4000/api/account/recuperacion', email)
             if(res.data.success){
-
+                NotificationManager.success(res.data.message, 'Recuperación')
+            }else{
+                NotificationManager.error(res.data.message, 'Recuperación')
             }
         } catch (error) {
-            
+            NotificationManager.error('Ha ocurrido un error', 'Error')
         }
     }
 
@@ -56,6 +58,7 @@ export default class Recuperacion extends Component {
                         </div>
                     </div>
                 </div>
+                <NotificationContainer />
             </div>
         )
     }

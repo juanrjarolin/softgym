@@ -8,7 +8,7 @@ class Cliente extends Component {
         localStorage.removeItem('usertoken');
         this.props.history.push(`/`);
     }
-
+    
     render() {
         return (
             <ul className="navbar-nav" >

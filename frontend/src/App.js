@@ -14,6 +14,7 @@ import Signup from './components/auth/SignUp';
 import Landing from './components/layouts/Landing';
 import Rol from './components/auth/Rol';
 import ActionUsers from './components/auth/ActionUsers';
+import Clientes from './components/cliente/Cliente'
 import Product from './components/productos/Product'
 import Proveedor from './components/proveedores/Proveedor'
 import Equipos from './components/equipos/Equipo'
@@ -23,6 +24,7 @@ import Reservas from './components/reservas/Reserva'
 import Sucursales from './components/sucursales/Sucursal'
 import VentaProducto from './components/ventas/Product'
 import Recuperacion from './components/auth/Recuperacion'
+import Permisos from './components/auth/Permisos'
 
 export default class App extends Component {
 
@@ -38,8 +40,10 @@ export default class App extends Component {
             <Route exact path="/recuperacion-password" component={Recuperacion} />
             <Route exact path="/profile" component={Profile} />
             <Route exact path="/rols" component={Rol} />
+            <Route exact path="/permisos" component={Permisos} />
             <Route exact path="/action-users" component={ActionUsers} />
             <Route exact path="/products" component={Product} />
+            <Route exact path="/clientes" component={Clientes} />
             <Route exact path="/proveedores" component={Proveedor} />
             <Route exact path="/equipos" component={Equipos} />
             <Route exact path="/mantenimiento" component={Mantenimiento} />

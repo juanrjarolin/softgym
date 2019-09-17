@@ -8,6 +8,7 @@ const bcrypt = require('bcrypt-nodejs');
 const passGenerator = require('generate-password');
 const UserModel = require('../models/User');
 const UserSessionModel = require('../models/UserSession');
+const PermisoModel = require('../models/Permisos');
 const moment = require('moment');
 const momentTZ = require('moment-timezone');
 moment.locale('es');
@@ -37,48 +38,58 @@ userController.login = async (req, res, next) => {
     }
 
     //busca el usuario
-    await UserModel.findOne({email})
+    await UserModel.findOne({ email })
         .then(user => {
             if (user) {
-                if(user.isPassChanged){
+                if (user.isPassChanged) {
                     //compara el pass recibido con el pass encriptado
                     if (user.compararPassword(password)) {
-                        //se genera un token para el usuario logueado, con los datos del mismo
-                        const payload = {
-                            _id: user._id,
-                            firstName: user.firstName,
-                            lastName: user.lastName,
-                            email: user.email,
-                            role: user.role.name
-                        }
-                        let token = jwt.sign(payload, process.env.SECRET_KEY, {
-                            expiresIn: 1440
-                        });
+                        PermisoModel.findOne({ rol: user.role._id })
+                            .then(per => {
+                                //se genera un token para el usuario logueado, con los datos del mismo
+                                const payload = {
+                                    _id: user._id,
+                                    firstName: user.firstName,
+                                    lastName: user.lastName,
+                                    email: user.email,
+                                    role: user.role.name,
+                                    permisos: per.permisos
+                                }
+                                let token = jwt.sign(payload, process.env.SECRET_KEY, {
+                                    expiresIn: 1440
+                                });
 
-                        //se guarda la sesion
-                        const userSession = new UserSessionModel({
-                            userToken: token,
-                            dateSession: moment().format('LLL')
-                        });
-                        
-                        userSession.save();
-                        //se envía el token
-                        res.send(token);
-                    }else{
+                                /*
+                                const userSession = new UserSessionModel({
+                                    userToken: token,
+                                    dateSession: moment().format('LLL')
+                                });
+
+                                userSession.save();
+                                //se envía el token*/
+                                res.send(token);
+                            })
+                            .catch(err => {
+                                res.json({
+                                    success: false,
+                                    message: 'No posee permisos'
+                                });
+                            });
+                    } else {
                         return res.json({
                             success: false,
                             message: 'Credenciales incorrectas'
                         });
                     }
-                }else{
+                } else {
                     //cambio de pass
-                    if(password === user.password){
+                    if (password === user.password) {
                         return res.json({
                             success: 'warning',
                             message: 'Debe cambiar el password',
                             data: user
                         });
-                    }else{
+                    } else {
                         return res.json({
                             success: false,
                             message: 'Credenciales incorrectas'
@@ -106,15 +117,15 @@ userController.login = async (req, res, next) => {
 //método para verificar si existe un usuario en una sesión, o denegar acceso
 userController.verificarUsuario = async (req, res, next) => {
     const token = req.headers['authorization'];
-    
-    if(token){
+
+    if (token) {
         await UserSessionModel.findOne({
             userToken: token
         })
             .then(sesion => {
-                if(sesion){
+                if (sesion) {
                     next();
-                }else{
+                } else {
                     res.json({
                         success: false,
                         message: 'No has iniciado sesión'
@@ -127,7 +138,7 @@ userController.verificarUsuario = async (req, res, next) => {
                     message: err
                 })
             })
-    }else{
+    } else {
         res.json({
             success: false,
             message: 'Acceso denegado'
@@ -139,11 +150,11 @@ userController.verificarUsuario = async (req, res, next) => {
 userController.getUsers = async (req, res) => {
     const users = await UserModel.find();
     res.json(users);
-        /*
-        exec(function (err, user) {
-        if (err) return handleError(err);
-            console.log('The user is %s', user);
-        });*/
+    /*
+    exec(function (err, user) {
+    if (err) return handleError(err);
+        console.log('The user is %s', user);
+    });*/
 };
 
 //método para crear un usuario
@@ -171,7 +182,7 @@ userController.createUser = async (req, res) => {
         });
     }
 
-    if(!role){
+    if (!role) {
         return res.json({
             success: false,
             message: 'Seleccione un rol'
@@ -235,8 +246,47 @@ userController.createUser = async (req, res) => {
     }
 }
 
-userController.recuperacionPassword = async(req, res) => {
-    
+userController.recuperacionPassword = async (req, res) => {
+    const { email } = req.body
+    try {
+        const user = await UserModel.find({ email: email });
+        if (user.length > 0) {
+            var password = passGenerator.generate({
+                length: 8,
+                numbers: true
+            });
+            var message = `
+                <div>
+                    <h3>Recuperación de Contraseña</h3>
+                    <p>Has recibido una contraseña generada por softgym para el acceso al sistema. Softgym solicitará cambiar la contraseña al momento de iniciar la sesión.</p>
+                    <p>Su contraseña de usuario es: ${password}</p>
+                        <footer>
+                            <address>
+                                SoftGym
+                            </address>
+                        </footer>
+                    </div>
+                `
+            sendEmail(email, message, 'Notificación de recuperación de contraseña');
+            user.password = password;
+            user.isPassChanged = false;
+            await user.save();
+            res.json({
+                success: true,
+                message: 'Se ha enviado al correo proporcionado un mensaje de recuperación de contraseña'
+            });
+        } else {
+            res.json({
+                success: false,
+                message: 'No existe usuario'
+            });
+        }
+    } catch (error) {
+        res.json({
+            success: false,
+            message: 'Ocurrió un error'
+        });
+    }
 }
 
 //método para mostrar un usuario
@@ -260,7 +310,7 @@ userController.updateUser = async (req, res) => {
     res.json({
         success: true,
         message: "Usuario actualizado"
-    });   
+    });
 };
 
 //método para cambiar el pass del usuario al iniciar la sesion
@@ -288,33 +338,33 @@ userController.afterActions = async (req, res, next) => {
     try {
         var recurso = '';
         const token = req.headers['authorization'];
-        const session = await UserSessionModel.findOne({userToken:token});
-        
+        const session = await UserSessionModel.findOne({ userToken: token });
+
         //consulta sobre el recurso solicitado
-        if(req.baseUrl === '/api/account'){
+        if (req.baseUrl === '/api/account') {
             recurso = 'usuarios';
-        }else if(req.baseUrl === '/api/products'){
+        } else if (req.baseUrl === '/api/products') {
             recurso = 'productos';
-        }else if(req.baseUrl === '/api/rols'){
+        } else if (req.baseUrl === '/api/rols') {
             recurso = 'roles';
         }
 
         //consulta sobre el método utilizado
-        if(req.method === 'GET'){
-            if(!req.params.id){
+        if (req.method === 'GET') {
+            if (!req.params.id) {
                 session.actions.push(`Consulta de ${recurso}`);
                 session.dateActions = new moment();
-            }else{
+            } else {
                 session.actions.push(`Consulta para actualización de ${recurso}`);
                 session.dateActions = new moment();
             }
-        }else if(req.method === 'POST'){
+        } else if (req.method === 'POST') {
             session.actions.push(`Creación de ${recurso}`);
             session.dateActions = new moment();
-        }else if(req.method === 'PUT'){
+        } else if (req.method === 'PUT') {
             session.actions.push(`Actualización de ${recurso}`);
             session.dateActions = new moment();
-        }else if(req.method === 'DELETE'){
+        } else if (req.method === 'DELETE') {
             session.actions.push(`Eliminación de ${recurso}`);
             session.dateActions = new moment();
         }
@@ -322,7 +372,7 @@ userController.afterActions = async (req, res, next) => {
         let conjunto = [...new Set(session.actions)];
         session.actions = conjunto;
         await session.save();
-        next(); 
+        next();
     } catch (error) {
         console.log(error);
     }
