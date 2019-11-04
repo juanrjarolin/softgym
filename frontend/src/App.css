@@ -1,0 +1,35 @@
+body, #root{
+    background: #fafafa;
+    height: 100%;
+    background-image: url("./components/layouts/fondo-gym.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    font-family: 'Nunito', sans-serif;
+    font-size: small;
+}
+
+.card {
+    background-color: rgba(0, 0, 0, .6);
+    color: white;
+}
+
+.form-control {
+    border-radius: 2px;
+}
+
+.react-datetime-picker__wrapper {
+    border: none !important;
+}
+
+i {
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.edit {
+    color: royalblue;
+}
+
+.delete {
+    color: crimson;
+}
