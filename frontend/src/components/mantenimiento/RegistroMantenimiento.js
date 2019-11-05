@@ -30,6 +30,7 @@ export default class RegistroMantenimiento extends Component {
 
     componentDidMount() {
         this.fetchEquipos()
+        this.fetchProveedores()
     }
 
     async fetchEquipos() {

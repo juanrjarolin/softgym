@@ -9,6 +9,7 @@ personaController.getPersona = async (req, res) => {
 
 personaController.getPersonas = async (req, res) => {
     const tipo = req.params.tipo;
+    console.log(tipo);
     if(tipo === 'proveedores'){
         const proveedores = await PersonaModel.find().where('es_proveedor').equals('true');
         res.json(proveedores);
