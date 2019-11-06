@@ -10,7 +10,7 @@ personaController.getPersona = async (req, res) => {
 personaController.getPersonas = async (req, res) => {
     const tipo = req.params.tipo;
     if(tipo === 'proveedores'){
-        const proveedores = await PersonaModel.find().where('es_proveedor').equals('true');
+        const proveedores = await PersonaModel.find().where('es_proveedor').equals(true);
         res.json(proveedores);
     }else{
         const clientes = await PersonaModel.find().where('es_cliente').equals('true');

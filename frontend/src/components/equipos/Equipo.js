@@ -116,7 +116,8 @@ export default class Equipo extends Component {
             categoria: this.state.categoria,
             descripcion: this.state.descripcion,
             estadoCompra: this.state.estadoCompra,
-            periodoMantenimiento: this.state.periodoMantenimiento
+            periodoMantenimiento: this.state.periodoMantenimiento,
+            pertenencia: this.state.pertenencia
         }
 
         try {

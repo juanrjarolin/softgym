@@ -8,7 +8,7 @@ const DetalleMantenimientoSchema = new Schema({
         ref: 'Mantenimiento'
     },
 
-    maquinas: {
+    maquina: {
         type: Schema.Types.ObjectId,
         required: true,
         ref: 'Maquina'
