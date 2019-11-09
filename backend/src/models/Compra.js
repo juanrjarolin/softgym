@@ -5,4 +5,4 @@ const CompraSchema = new Schema({
 });
 
 
-module.exports = model('Compra', CompraSchema);
+module.exports = model('Compra', CompraSchema);gi
