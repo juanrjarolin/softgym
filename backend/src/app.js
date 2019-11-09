@@ -35,6 +35,7 @@ app.use('/api/detalle-ventas', require('./routes/detalleVentas.routes')); //deta
 app.use('/api/equipos', require('./routes/equipos.routes')); //Equipos del gimnasio
 app.use('/api/categoriaMaquinas', require('./routes/categoriaMaquinas.routes')); //categorias maquinas
 app.use('/api/mantenimiento', require('./routes/mantenimientos.routes')); //mantenimiento de equipos
+app.use('/api/detalle-mantenimiento', require('./routes/detalleMantenimiento.routes'));
 app.use('/api/clases', require('./routes/class.routes')); //clases
 app.use('/api/sucursales', require('./routes/sucursales.routes')); //sucursales
 app.use('/api/reservas', require('./routes/reservas.routes')); //reservas

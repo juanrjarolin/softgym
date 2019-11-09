@@ -4,14 +4,15 @@ const autopopulate = require('mongoose-autopopulate');
 const DetalleMantenimientoSchema = new Schema({
     mantenimiento: {
         type: Schema.Types.ObjectId,
-        required: true,
-        ref: 'Mantenimiento'
+        ref: 'Mantenimiento',
+        autopopulate: true
     },
 
     maquina: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'Maquina'
+        ref: 'Maquina',
+        autopopulate: true
     },
 
     detalle: {
@@ -28,6 +29,6 @@ const DetalleMantenimientoSchema = new Schema({
     timestamps: false
 });
 
-MantenimientoSchema.plugin(autopopulate);
+DetalleMantenimientoSchema.plugin(autopopulate);
 
 module.exports = model('DetalleMantenimiento', DetalleMantenimientoSchema);

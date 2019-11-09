@@ -6,13 +6,13 @@ import jwt_decode from 'jwt-decode'
 import Security from '../security/Security'
 
 export default class Mantenimiento extends Component {
-    constructor() {
-        super()
+    constructor(props) {
+        super(props)
         this.state = {
             equipos: [],
             mantenimientos: [],
             equipo: '',
-            detalles: '',
+            detalles: [],
             editing: false,
             _id: '',
             isLoading: true,
@@ -56,17 +56,7 @@ export default class Mantenimiento extends Component {
     }
 
     async editMantenimiento(id) {
-        try {
-            const result = await axios.get('http://localhost:4000/api/mantenimiento/' + id)
-            this.setState({
-                equipo: result.data.equipo._id,
-                detalles: result.data.detalleMantenimiento,
-                _id: result.data._id,
-                editing: true
-            })
-        } catch (error) {
-            console.log(error)
-        }
+        this.props.history.push(`/registro-mantenimiento/${id}`)
     }
 
     async deleteMantenimiento(id) {
@@ -74,12 +64,16 @@ export default class Mantenimiento extends Component {
             const result = await axios.delete('http://localhost:4000/api/mantenimiento/' + id)
             if (result.data.success) {
                 this.fetchMantenimientos()
-                NotificationManager.success(result.data.message, 'Registro')
+                NotificationManager.success(result.data.message, 'Mantenimiento')
             }
         } catch (error) {
             console.log(error)
         }
 
+    }
+
+    async showDetalles(id){
+        this.props.history.push(`/detalle-mantenimiento/${id}`)
     }
 
     handleSubmit = async (e) => {
@@ -135,13 +129,9 @@ export default class Mantenimiento extends Component {
                                 <table className="table table-hover table-dark">
                                     <thead>
                                         <tr>
-                                            <th scope="col">Equipo</th>
                                             <th scope="col">Mantenimiento</th>
                                             <th scope="col">Fecha de mantenimiento</th>
-                                            <th scope="col">Detalles</th>
-                                            <th scope="col">Costo Fijo</th>
-                                            <th scope="col">Costo Variable</th>
-                                            <th scope="col">Costo Financiero</th>
+                                            <th scope="col">Proveedor</th>
                                             <th scope="col">Costo Total</th>
                                         </tr>
                                     </thead>
@@ -150,14 +140,27 @@ export default class Mantenimiento extends Component {
                                             this.state.mantenimientos.map((mant) => {
                                                 return (
                                                     <tr key={mant._id}>
-                                                        <td>{mant.equipo.nombre}</td>
                                                         <td>{mant.tipoMantenimiento}</td>
-                                                        <td>{mant.fechaMantenimiento}</td>
-                                                        <td>{mant.detalle}</td>
-                                                        <td>{mant.costoFijo}</td>
-                                                        <td>{mant.costoVariable}</td>
-                                                        <td>{mant.costoFinanciero}</td>
+                                                        <td>{mant.fecha}</td>
+                                                        <td>{mant.proveedor.nombre + ' ' + mant.proveedor.apellido}</td>
                                                         <td>{mant.costoTotal}</td>
+                                                        <td>
+                                                            <button className="btn btn-success btn-sm">
+                                                                <i className="material-icons" onClick={() => this.editMantenimiento(mant._id)}>
+                                                                    edit
+                                                                </i>
+                                                            </button>
+                                                            <button className="btn btn-danger btn-sm" style={{margin: '4px'}}>
+                                                                <i className="material-icons" onClick={() => this.deleteMantenimiento(mant._id)}>
+                                                                    delete
+                                                                </i>
+                                                            </button>
+                                                            <button className="btn btn-primary btn-sm">
+                                                                <i className="material-icons" onClick={() => this.showDetalles(mant._id)}>
+                                                                    info
+                                                                </i>
+                                                            </button>
+                                                        </td>
                                                     </tr>
                                                 )
                                             })
@@ -168,26 +171,9 @@ export default class Mantenimiento extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="row">
-                    <div className="col-sm-12">
-                        <nav aria-label="Page navigation example">
-                            <ul className="pagination pagination-sm justify-content-center">
-                                <li className="page-item disabled">
-                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Atrás</a>
-                                </li>
-                                <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                <li className="page-item">
-                                    <a className="page-link" href="#">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
                 <div className="row py-3">
                     <div className="col-sm-12">
-                        <Link to="/registro-mantenimiento" className="btn btn-danger btn-sm">Nuevo</Link>
+                        <Link to="/registro-mantenimiento/nuevo" className="btn btn-danger btn-sm">Nuevo</Link>
                     </div>
                 </div>
                 <NotificationContainer />

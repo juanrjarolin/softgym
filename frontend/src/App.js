@@ -26,6 +26,7 @@ import VentaProducto from './components/ventas/Product'
 import Recuperacion from './components/auth/Recuperacion'
 import Permisos from './components/auth/Permisos'
 import CategoriaMaquina from './components/equipos/Categoria'
+import DetalleMantenimiento from './components/mantenimiento/Detalles'
 
 export default class App extends Component {
 
@@ -52,7 +53,8 @@ export default class App extends Component {
             <Route exact path="/sucursales" component={Sucursales} />
             <Route exact path="/venta-producto" component={VentaProducto} />
             <Route exact path="/categoria-maquina" component={CategoriaMaquina} />
-            <Route exact path="/registro-mantenimiento" component={RegistroMantenimiento} />
+            <Route exact path="/registro-mantenimiento/:id" component={RegistroMantenimiento} />
+            <Route exact path="/detalle-mantenimiento/:id" component={DetalleMantenimiento} />
           </Switch>
         </div>
       </Router>

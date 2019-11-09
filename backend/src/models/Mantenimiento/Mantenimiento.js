@@ -5,7 +5,8 @@ const MantenimientoSchema = new Schema({
     proveedor: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: 'Persona'
+        ref: 'Persona',
+        autopopulate: true
     },
 
     tipoMantenimiento: {
@@ -20,7 +21,7 @@ const MantenimientoSchema = new Schema({
 
     costoTotal: {
         type: Number,
-        required: true
+        default: 0
     }
 
 }, {
